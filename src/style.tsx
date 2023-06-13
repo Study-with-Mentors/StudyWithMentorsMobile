@@ -8,6 +8,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 
+    topView: {
+        width: '100%',
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+    },
+
     formContainer: {
         width: '75%',
         flex: 1,
