@@ -2,6 +2,7 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import HomeScreen from '../../screens/home/home-screen';
+import Profile from '../../screens/profile/profile-screen';
 import CourseSearchScreen from '../../screens/course/course-search-screen';
 
 const Tab = createBottomTabNavigator();
@@ -17,11 +18,7 @@ const BottomNavigation = () => {
                 component={HomeScreen}
                 options={{
                     tabBarIcon: ({focused, color, size}) => (
-                        <Icon
-                            name="home"
-                            color={color}
-                            size={size}
-                        />
+                        <Icon name="home" color={color} size={size} />
                     ),
                 }}
             />
@@ -30,24 +27,16 @@ const BottomNavigation = () => {
                 component={CourseSearchScreen}
                 options={{
                     tabBarIcon: ({focused, color, size}) => (
-                        <Icon
-                            name="book"
-                            color={color}
-                            size={size}
-                        />
+                        <Icon name="book" color={color} size={size} />
                     ),
                 }}
             />
             <Tab.Screen
                 name="Profile"
-                component={HomeScreen}
+                component={Profile}
                 options={{
                     tabBarIcon: ({focused, color, size}) => (
-                        <Icon
-                            name="account-circle"
-                            color={color}
-                            size={size}
-                        />
+                        <Icon name="account-circle" color={color} size={size} />
                     ),
                 }}
             />

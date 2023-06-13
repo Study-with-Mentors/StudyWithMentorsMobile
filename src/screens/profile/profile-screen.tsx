@@ -1,12 +1,24 @@
-import {Text, View} from 'react-native';
-import React from 'react';
+import {View} from 'react-native';
+import React, {useState} from 'react';
+import styles from '../../style';
+import LoginForm from '../../components/login-form/login-form';
+import SignUpForm from '../../components/sign-up-form/sign-up-form';
 
-const HomeScreen = () => {
+const Profile = () => {
+    const [isLogin, setIsLogin] = useState(true);
+    const toggleLogin = () => {
+        setIsLogin(!isLogin);
+    };
+    // TODO: copy form layout from frontend
     return (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <Text>Home</Text>
+        <View style={styles.centerView}>
+            {isLogin ? (
+                <LoginForm redirect={toggleLogin} />
+            ) : (
+                <SignUpForm redirect={toggleLogin} />
+            )}
         </View>
     );
 };
 
-export default HomeScreen;
+export default Profile;
