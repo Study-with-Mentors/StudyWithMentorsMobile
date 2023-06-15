@@ -1,18 +1,15 @@
-import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import AuthStacks from './auth/auth-stack';
+import HomeScreen from './discover/home/home-screen';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import HomeScreen from '../../screens/home/home-screen';
-import Profile from '../../screens/profile/profile-screen';
-import CourseSearchScreen from '../../screens/course/course-search-screen';
+import CourseSearchScreen from './course/course-search-screen';
+import React from 'react';
 
 const Tab = createBottomTabNavigator();
 
-const BottomNavigation = () => {
+const LandingTab = () => {
     return (
-        <Tab.Navigator
-            screenOptions={{
-                tabBarShowLabel: false,
-            }}>
+        <Tab.Navigator>
             <Tab.Screen
                 name="Home"
                 component={HomeScreen}
@@ -33,7 +30,7 @@ const BottomNavigation = () => {
             />
             <Tab.Screen
                 name="Profile"
-                component={Profile}
+                component={AuthStacks}
                 options={{
                     tabBarIcon: ({focused, color, size}) => (
                         <Icon name="account-circle" color={color} size={size} />
@@ -44,4 +41,4 @@ const BottomNavigation = () => {
     );
 };
 
-export default BottomNavigation;
+export default LandingTab;
