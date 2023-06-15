@@ -24,7 +24,10 @@ export enum CourseStatus {
     DISABLE = 'DISABLE',
 }
 
-export enum CourseLevel {}
+export enum CourseLevel {
+    BEGINNER = 'BEGINNER',
+    ADVANCE = 'ADVANCE',
+}
 
 export enum CourseIntendedLearner {
     STUDENT = 'STUDENT',

@@ -1,11 +1,11 @@
 import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import BottomNavigation from './src/components/footer/bottom-navigation';
+import AppScreenStack from './src/screens/screen-stack';
 
 export default function App(): React.JSX.Element {
     return (
         <NavigationContainer>
-            <BottomNavigation />
+            <AppScreenStack />
         </NavigationContainer>
     );
 }

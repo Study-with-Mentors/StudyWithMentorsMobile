@@ -1,11 +1,15 @@
 import React from 'react';
-import {ScrollView, Text, View} from 'react-native';
-import styles from '../../style';
-import {Course, CourseIntendedLearner} from '../../types/course';
-import CourseCompact from '../../components/course-compact/course-compact';
-import {Field} from '../../types/field';
-import {User} from '../../types/user';
-import CourseFull from "../../components/course-full/course-full";
+import {View} from 'react-native';
+import styles from '../../../../style';
+import {
+    Course,
+    CourseIntendedLearner,
+    CourseLevel,
+    CourseStatus,
+} from '../../../../types/course';
+import {Field} from '../../../../types/field';
+import {User} from '../../../../types/user';
+import CourseFull from '../../../../components/course-full/course-full';
 
 const HomeScreen = () => {
     let field: Partial<Field> = {
@@ -23,6 +27,9 @@ const HomeScreen = () => {
         fullName: 'Introduction to Computer science: A very easy course',
         shortName: 'Computer science',
         intendedLearner: CourseIntendedLearner.COLLEGE,
+        learningOutcome: 'Fully understand CS',
+        courseLevel: CourseLevel.ADVANCE,
+        status: CourseStatus.OPEN,
         field: field,
         description:
             'A full course to understand everything about computer science',
@@ -30,7 +37,7 @@ const HomeScreen = () => {
     };
     return (
         <View style={[styles.topView, {margin: 5, gap: 10}]}>
-            <CourseFull course={course}/>
+            <CourseFull course={course} />
             {/*<Text style={styles.heading1}>Upcoming course</Text>*/}
             {/*<ScrollView style={{width: '100%', height: '50%'}}>*/}
             {/*    <CourseCompact course={course} />*/}

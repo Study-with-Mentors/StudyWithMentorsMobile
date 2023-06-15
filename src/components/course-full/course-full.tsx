@@ -16,15 +16,24 @@ const styles = StyleSheet.create({
         color: 'black',
     },
 
-    mentor: {
+    subText: {
         fontSize: 15,
+    },
+
+    strongText: {
+        fontSize: 15,
+        fontWeight: 'bold',
+        color: 'black',
+    },
+
+    mentor: {
         fontWeight: 'normal',
+        color: 'blue',
+        textDecorationLine: 'underline',
     },
 
     description: {
         fontSize: 15,
-        fontWeight: '300',
-        color: 'gray',
     },
 
     horizontal: {
@@ -36,7 +45,7 @@ const styles = StyleSheet.create({
     },
 });
 
-const CourseFull = ({course}: {course: Course}) => {
+const CourseFull = ({course}: {course: Partial<Course>}) => {
     // list of clazz
     // mentor information
     return (
@@ -45,25 +54,33 @@ const CourseFull = ({course}: {course: Course}) => {
                 source={{uri: 'https://reactjs.org/logo-og.png'}}
                 style={{width: 200, height: 200}}
             />
-            <Text>{course.fullName}</Text>
+            <Text style={styles.courseName}>{course.fullName}</Text>
             <View style={styles.horizontal}>
-                <Text>
-                    {course.mentor.firstName} {course.mentor.lastName} -{' '}
+                <Text style={[styles.mentor, styles.subText]}>
+                    {course.mentor?.firstName} {course.mentor?.lastName}
                 </Text>
-                <Text>{course.field?.name}</Text>
+                <Text style={styles.subText}> - {course.field?.name}</Text>
             </View>
-            <Text>
-                {'\u2B24'} {course.learningOutcome}
-            </Text>
-            <Text>
-                {'\u2B24'} {course.intendedLearner}
-            </Text>
-            <Text>
-                {'\u2B24'} {course.courseLevel}
-            </Text>
-            <Text>
-                {course.description}
-            </Text>
+            <View>
+                <Text style={styles.subText}>
+                    {'\u2B24'} <Text style={styles.strongText}>Outcome</Text>:{' '}
+                    {course.learningOutcome}
+                </Text>
+                <Text style={styles.subText}>
+                    {'\u2B24'} <Text style={styles.strongText}>For</Text>:{' '}
+                    {course.intendedLearner}
+                </Text>
+                <Text style={styles.subText}>
+                    {'\u2B24'} <Text style={styles.strongText}>Level</Text>:{' '}
+                    {course.courseLevel}
+                </Text>
+                <Text style={styles.subText}>
+                    {'\u2B24'} <Text style={styles.strongText}>Status</Text>:{' '}
+                    {course.status}
+                </Text>
+            </View>
+            <Text style={styles.strongText}>Description</Text>
+            <Text style={styles.description}>{course.description}</Text>
         </View>
     );
 };
