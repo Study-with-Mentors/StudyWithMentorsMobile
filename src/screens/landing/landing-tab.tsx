@@ -1,8 +1,8 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import AuthStacks from './auth/auth-stack';
 import HomeScreen from './discover/home/home-screen';
+import SearchScreen from './search/search-screen';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import CourseSearchScreen from './course/course-search-screen';
 import React from 'react';
 
 const Tab = createBottomTabNavigator();
@@ -10,6 +10,7 @@ const Tab = createBottomTabNavigator();
 const LandingTab = () => {
     return (
         <Tab.Navigator>
+            {/*TODO: change this homescreen to discover screen*/}
             <Tab.Screen
                 name="Home"
                 component={HomeScreen}
@@ -20,8 +21,8 @@ const LandingTab = () => {
                 }}
             />
             <Tab.Screen
-                name="CourseSearch"
-                component={CourseSearchScreen}
+                name="Search"
+                component={SearchScreen}
                 options={{
                     tabBarIcon: ({focused, color, size}) => (
                         <Icon name="book" color={color} size={size} />

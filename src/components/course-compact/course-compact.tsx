@@ -1,19 +1,21 @@
 import {Course} from '../../types/course';
-import {View, Text, Image, StyleSheet} from 'react-native';
+import {View, Text, Image, StyleSheet, Dimensions} from 'react-native';
 
 const styles = StyleSheet.create({
     courseContainer: {
-        borderWidth: 1,
+        overflow: 'hidden',
+        width: Dimensions.get('window').width * 0.45,
         borderRadius: 5,
-        margin: 5,
+        borderWidth: 1,
         borderColor: 'gray',
-        padding: 10,
+        margin: 5,
     },
 
     courseName: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: '500',
         color: 'black',
+        marginBottom: 5,
     },
 
     mentor: {
@@ -27,6 +29,11 @@ const styles = StyleSheet.create({
         color: 'gray',
     },
 
+    descriptionContainer: {
+        padding: 10,
+        backgroundColor: 'white',
+    },
+
     horizontal: {
         flexDirection: 'row',
     },
@@ -34,25 +41,28 @@ const styles = StyleSheet.create({
     vertical: {
         flexDirection: 'column',
     },
+
+    image: {
+        width: '100%',
+        height: 120,
+    },
 });
 
 const CourseCompact = ({course}: {course: Partial<Course>}) => {
     // TODO: cut the overflown description text
+    // TODO: replace Image with data from backend
+    // TODO: make this touchable to navigate to course detail
     return (
-        <View style={[styles.horizontal, styles.courseContainer]}>
+        <View style={[styles.vertical, styles.courseContainer]}>
             <Image
                 source={{uri: 'https://reactjs.org/logo-og.png'}}
-                style={{width: 100, height: 100}}
+                style={styles.image}
             />
-            <View style={[styles.vertical, {flex: 2, paddingLeft: 15}]}>
+            <View style={styles.descriptionContainer}>
                 <Text style={styles.courseName}>{course.shortName}</Text>
                 <Text style={styles.mentor}>
                     {course.mentor?.firstName} {course.mentor?.lastName}
                 </Text>
-                <View style={styles.horizontal}>
-                    <Text>{course.intendedLearner} - </Text>
-                    <Text>{course.field?.name}</Text>
-                </View>
                 <Text style={styles.description}>{course.description}</Text>
             </View>
         </View>

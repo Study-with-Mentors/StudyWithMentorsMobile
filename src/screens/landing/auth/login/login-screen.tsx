@@ -47,7 +47,7 @@ const LoginScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
                         <Text style={styles.heading1}>Login</Text>
                         <View style={styles.inputContainer}>
                             <TextInput
-                                style={[styles.textInput, {width: '100%'}]}
+                                style={[styles.textInput]}
                                 onChangeText={handleChange('email')}
                                 onBlur={handleBlur('email')}
                                 placeholder="Email"
@@ -59,7 +59,7 @@ const LoginScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
                         </View>
                         <View style={styles.inputContainer}>
                             <TextInput
-                                style={[styles.textInput, {width: '100%'}]}
+                                style={[styles.textInput]}
                                 onChangeText={handleChange('password')}
                                 onBlur={handleBlur('password')}
                                 secureTextEntry={true}

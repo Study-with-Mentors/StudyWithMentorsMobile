@@ -1,5 +1,6 @@
 import {Image, StyleSheet, View, Text} from 'react-native';
 import {Course} from '../../types/course';
+import Line from '../line/line';
 
 const styles = StyleSheet.create({
     courseContainer: {
@@ -55,32 +56,35 @@ const CourseFull = ({course}: {course: Partial<Course>}) => {
                 style={{width: 200, height: 200}}
             />
             <Text style={styles.courseName}>{course.fullName}</Text>
+            <Text style={styles.description}>{course.description}</Text>
+            <Line />
+            <View>
+                <Text style={styles.subText}>
+                    {/*TODO: get number of session and enrollments*/}
+                    {'\u2B24'} <Text style={styles.strongText}>Outcome</Text>:{' '}
+                    {course.learningOutcome}
+                </Text>
+                <Text style={styles.subText}>
+                    {/*TODO: add an icon*/}
+                    {course.courseLevel}
+                </Text>
+            </View>
+            <Line />
+            <View>
+                <Text>What you'll learn</Text>
+                <Text>{course.learningOutcome}</Text>
+            </View>
+            <View>
+                <Text>Intended learner</Text>
+                <Text>{course.intendedLearner}</Text>
+            </View>
+
             <View style={styles.horizontal}>
                 <Text style={[styles.mentor, styles.subText]}>
                     {course.mentor?.firstName} {course.mentor?.lastName}
                 </Text>
                 <Text style={styles.subText}> - {course.field?.name}</Text>
             </View>
-            <View>
-                <Text style={styles.subText}>
-                    {'\u2B24'} <Text style={styles.strongText}>Outcome</Text>:{' '}
-                    {course.learningOutcome}
-                </Text>
-                <Text style={styles.subText}>
-                    {'\u2B24'} <Text style={styles.strongText}>For</Text>:{' '}
-                    {course.intendedLearner}
-                </Text>
-                <Text style={styles.subText}>
-                    {'\u2B24'} <Text style={styles.strongText}>Level</Text>:{' '}
-                    {course.courseLevel}
-                </Text>
-                <Text style={styles.subText}>
-                    {'\u2B24'} <Text style={styles.strongText}>Status</Text>:{' '}
-                    {course.status}
-                </Text>
-            </View>
-            <Text style={styles.strongText}>Description</Text>
-            <Text style={styles.description}>{course.description}</Text>
         </View>
     );
 };

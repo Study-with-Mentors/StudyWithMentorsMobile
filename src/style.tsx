@@ -10,24 +10,26 @@ const styles = StyleSheet.create({
 
     topView: {
         width: '100%',
-        flex: 1,
+        // flex: 1,
         justifyContent: 'flex-start',
-        alignItems: 'center',
+        alignItems: 'flex-start',
+        padding: 10,
     },
 
     formContainer: {
         width: '75%',
         flex: 1,
+        rowGap: 5,
         justifyContent: 'center',
         alignItems: 'center',
     },
 
     inputContainer: {
-        margin: 5,
         width: '100%',
     },
 
     textInput: {
+        width: '100%',
         borderStyle: 'solid',
         borderWidth: 1,
         borderColor: 'gray',
@@ -44,6 +46,29 @@ const styles = StyleSheet.create({
     heading1: {
         fontSize: 20,
         fontWeight: 'bold',
+        color: 'blue',
+    },
+
+    button: {
+        backgroundColor: 'red',
+        height: 35,
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+    },
+
+    buttonText: {
+        color: 'white',
+        fontWeight: 'bold',
+    },
+
+    horizontal: {
+        flexDirection: 'row',
+    },
+
+    vertical: {
+        flexDirection: 'column',
     },
 });
 
