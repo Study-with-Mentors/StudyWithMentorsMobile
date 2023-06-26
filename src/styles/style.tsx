@@ -30,8 +30,13 @@ const globalStyles = StyleSheet.create({
         color: 'blue',
     },
 
+    heading2: {
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+
     alignLeft: {
-        alignItems: "flex-start",
+        alignItems: 'flex-start',
     },
 
     horizontal: {

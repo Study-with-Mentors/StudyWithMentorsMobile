@@ -13,7 +13,7 @@ export type Course = {
     intendedLearner: CourseIntendedLearner;
     field: Partial<Field>;
     mentor: Partial<User>;
-    images: Image;
+    image: Image;
 };
 
 export enum CourseStatus {

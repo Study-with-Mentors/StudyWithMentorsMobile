@@ -31,11 +31,14 @@ const validate = (values: LoginState) => {
 };
 const LoginScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
     const [message, setMessage] = useState('');
+    const [loading, setLoading] = useState(false);
     const login = (values: LoginState): void => {
+        setLoading(true);
         UserAPI.login({email: values.email, password: values.password})
             .then(response => {
                 saveAccessToken(response);
                 navigation.navigate('Logged', {screen: 'Home'});
+                setLoading(false);
             })
             .catch(_error => setMessage('Wrong email or password'));
     };
@@ -87,7 +90,7 @@ const LoginScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
                             ) : null}
                         </View>
                         <Text style={globalStyles.error}>{message}</Text>
-                        <ButtonCustom onPress={handleSubmit} title="Login" />
+                        <ButtonCustom onPress={handleSubmit} title="Login" disabled={loading} />
                         <Text
                             onPress={() => navigation.navigate('SignUp')}
                             style={globalStyles.marginTop}>

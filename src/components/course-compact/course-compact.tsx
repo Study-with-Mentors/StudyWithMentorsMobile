@@ -23,17 +23,15 @@ const CourseCompact = ({course}: {course: Partial<Course>}) => {
             ]}>
             <TouchableOpacity
                 onPress={() =>
-                    navigation.navigate('CourseDetail', {
+                    navigation.navigate('CourseDetailStack', {
                         screen: 'CourseDetail',
                         params: {
                             courseId: course.id,
                         },
                     })
-                } style={{flex: 1}}>
-                <Image
-                    source={{uri: 'https://reactjs.org/logo-og.png'}}
-                    style={styles.image}
-                />
+                }
+                style={{flex: 1}}>
+                <Image source={{uri: course.image?.url}} style={styles.image} />
                 <View style={globalStyles.descriptionContainer}>
                     <Text style={globalStyles.courseName}>
                         {course.shortName}

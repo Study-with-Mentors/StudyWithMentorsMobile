@@ -6,7 +6,7 @@ class Http {
     constructor() {
         this.instance = axios.create({
             baseURL:
-                'Change this',
+                'http://studywithmentor.ap-southeast-1.elasticbeanstalk.com/api',
             timeout: 10000,
             headers: {
                 'Content-Type': 'application/json',

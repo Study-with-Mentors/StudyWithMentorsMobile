@@ -8,6 +8,7 @@ import {SessionAPI} from '../../api/session-api';
 import ButtonCustom from '../button-custom/button-custom';
 import globalStyles from '../../styles/style';
 import {useNavigation} from '@react-navigation/native';
+import LoadingIndicator from '../loading-indicator/loading-indicator';
 
 const styles = StyleSheet.create({
     courseCompactContainer: {
@@ -29,6 +30,7 @@ const CourseFull = ({courseId}: {courseId: string}) => {
     // TODO: API call error handler
     useEffect(() => {
         CourseAPI.getById(courseId).then(response => {
+            console.log(response);
             setCourse(response);
         });
         SessionAPI.getSessionByCourseID(courseId).then(response => {
@@ -37,16 +39,14 @@ const CourseFull = ({courseId}: {courseId: string}) => {
         // TODO: get mentor profile by id
     }, [courseId]);
     if (course == null || sessions == null) {
-        return <Text>Loading</Text>;
+        return <LoadingIndicator loadingText={'Loading course'} />;
     }
+
     return (
         <ScrollView
             style={globalStyles.vertical}
             contentContainerStyle={[{gap: 5, backgroundColor: 'white'}]}>
-            <Image
-                source={{uri: 'https://reactjs.org/logo-og.png'}}
-                style={styles.image}
-            />
+            <Image source={{uri: course.image?.url}} style={styles.image} />
             <View style={{paddingHorizontal: 20, paddingVertical: 10, gap: 10}}>
                 {/*course*/}
                 <Text style={globalStyles.courseName}>{course.fullName}</Text>
@@ -121,10 +121,10 @@ const CourseFull = ({courseId}: {courseId: string}) => {
                     }>
                     Sessions
                 </Text>
-                {sessions.map((s, key) => {
+                {sessions.map((s) => {
                     // TODO: add style
                     return (
-                        <View style={globalStyles.sessionContainer} key={key}>
+                        <View style={globalStyles.sessionContainer} key={s.id}>
                             <Text style={globalStyles.sessionName}>
                                 {s.sessionNum}. {s.sessionName}
                             </Text>

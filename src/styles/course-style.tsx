@@ -27,7 +27,22 @@ const courseStyle = StyleSheet.create({
         fontWeight: 'normal',
     },
 
-    sessionContainer: {},
+    sessionContainer: {
+        gap: 5,
+    },
+
+    activityContainer: {
+        borderWidth: 1,
+        borderColor: '#CCCCCC',
+        borderRadius: 5,
+        backgroundColor: '#E6E6E6',
+        padding: 5,
+        paddingLeft: 10,
+    },
+
+    activityTitle: {
+        color: 'black',
+    },
 
     sessionName: {
         fontWeight: 'bold',
