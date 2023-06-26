@@ -1,9 +1,12 @@
 import {Formik} from 'formik';
 import {Text, TextInput, View} from 'react-native';
-import styles from '../../../../style';
+import globalStyles from '../../../../styles/style';
 import React from 'react';
 import ButtonCustom from '../../../../components/button-custom/button-custom';
 import {NavigationProp} from '@react-navigation/native';
+import {UserAPI} from '../../../../api/user-api';
+import {saveAccessToken} from '../../../../utils/http';
+import {useState} from 'react/index';
 
 interface LoginState {
     email: string;
@@ -11,7 +14,7 @@ interface LoginState {
 }
 
 const validate = (values: LoginState) => {
-    const errors: LoginState = {email: '', password: ''};
+    const errors: Partial<LoginState> = {};
     if (!values.email) {
         errors.email = 'Email is required';
     } else if (
@@ -22,19 +25,28 @@ const validate = (values: LoginState) => {
 
     if (!values.password) {
         errors.password = 'Password is required';
-    } else if (values.password.length < 8) {
-        errors.password = 'Password must be more than 8 characters';
     }
 
     return errors;
 };
 const LoginScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
+    const [message, setMessage] = useState('');
+    const login = (values: LoginState): void => {
+        UserAPI.login({email: values.email, password: values.password})
+            .then(response => {
+                saveAccessToken(response);
+                navigation.navigate('Logged', {screen: 'Home'});
+            })
+            .catch(_error => setMessage('Wrong email or password'));
+    };
+
+    // TODO: loading icon
     return (
-        <View style={styles.centerView}>
+        <View style={globalStyles.centerView}>
             <Formik
                 validate={validate}
                 initialValues={{email: '', password: ''}}
-                onSubmit={values => console.log(values)}>
+                onSubmit={login}>
                 {({
                     handleChange,
                     handleBlur,
@@ -43,23 +55,25 @@ const LoginScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
                     errors,
                     touched,
                 }) => (
-                    <View style={styles.formContainer}>
-                        <Text style={styles.heading1}>Login</Text>
-                        <View style={styles.inputContainer}>
+                    <View style={globalStyles.formContainer}>
+                        <Text style={globalStyles.heading1}>Login</Text>
+                        <View style={globalStyles.inputContainer}>
                             <TextInput
-                                style={[styles.textInput]}
+                                style={[globalStyles.textInput]}
                                 onChangeText={handleChange('email')}
                                 onBlur={handleBlur('email')}
                                 placeholder="Email"
                                 value={values.email}
                             />
                             {errors.email && touched.email ? (
-                                <Text style={styles.error}>{errors.email}</Text>
+                                <Text style={globalStyles.error}>
+                                    {errors.email}
+                                </Text>
                             ) : null}
                         </View>
-                        <View style={styles.inputContainer}>
+                        <View style={globalStyles.inputContainer}>
                             <TextInput
-                                style={[styles.textInput]}
+                                style={[globalStyles.textInput]}
                                 onChangeText={handleChange('password')}
                                 onBlur={handleBlur('password')}
                                 secureTextEntry={true}
@@ -67,21 +81,18 @@ const LoginScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
                                 value={values.password}
                             />
                             {errors.password && touched.password ? (
-                                <Text style={styles.error}>
+                                <Text style={globalStyles.error}>
                                     {errors.password}
                                 </Text>
                             ) : null}
                         </View>
+                        <Text style={globalStyles.error}>{message}</Text>
                         <ButtonCustom onPress={handleSubmit} title="Login" />
                         <Text
                             onPress={() => navigation.navigate('SignUp')}
-                            style={{marginTop: 15}}>
+                            style={globalStyles.marginTop}>
                             Have not create an account?{' '}
-                            <Text
-                                style={{
-                                    color: 'blue',
-                                    textDecorationLine: 'underline',
-                                }}>
+                            <Text style={globalStyles.underlineText}>
                                 Sign Up
                             </Text>
                         </Text>

@@ -1,17 +1,30 @@
-import {View, Text} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {ScrollView, Text, View} from 'react-native';
 import {SearchBar} from 'react-native-elements';
-import {useEffect, useState} from 'react';
+import CourseCompact from '../../../components/course-compact/course-compact';
+import {Course} from '../../../types/course';
+import {CourseAPI, SearchCourseParams} from '../../../api/course-api';
+import globalStyles from '../../../styles/style';
 
 const SearchScreen = () => {
     const [search, setSearch] = useState('');
-    const [display, setDisplay] = useState('');
+    const [courses, setCourses] = useState<Course[]>([]);
+    const [loading, setLoading] = useState(false);
 
     const searchCourse = (s: string): void => {
         setSearch(s);
     };
 
     useEffect(() => {
-        const timeOutId = setTimeout(() => setDisplay(search), 300);
+        const timeOutId = setTimeout(() => {
+            setLoading(true);
+            let searchCourseParams: SearchCourseParams = {};
+            searchCourseParams.name = search;
+            CourseAPI.getAll(searchCourseParams).then(response => {
+                setCourses(response.result);
+                setLoading(false);
+            });
+        }, 300);
         return () => clearTimeout(timeOutId);
     }, [search]);
 
@@ -22,7 +35,53 @@ const SearchScreen = () => {
                 onChangeText={searchCourse}
                 value={search}
             />
-            <Text>{display}</Text>
+            {/*TODO: it is missing some text at the end of scoll view*/}
+            {loading ? (
+                <Text>Loading</Text>
+            ) : (
+                <ScrollView
+                    contentContainerStyle={{alignItems: 'center'}}
+                    style={{height: '100%'}}>
+                    <View>
+                        {courses
+                            .reduce(
+                                (
+                                    accumulator,
+                                    currentValue,
+                                    currentIndex,
+                                    array,
+                                ) => {
+                                    if (currentIndex % 2 === 0) {
+                                        accumulator.push(
+                                            array.slice(
+                                                currentIndex,
+                                                currentIndex + 2,
+                                            ) as never,
+                                        );
+                                    }
+                                    return accumulator;
+                                },
+                                [],
+                            )
+                            .map((c, key) => {
+                                return (
+                                    <View
+                                        style={[
+                                            globalStyles.horizontal,
+                                            // globalStyles.alignLeft,
+                                            // { justifyContent: "flex-end", alignItems: "flex-end" }
+                                        ]}
+                                        key={key}>
+                                        <CourseCompact course={c[0]} />
+                                        {c[1] && (
+                                            <CourseCompact course={c[1]} />
+                                        )}
+                                    </View>
+                                );
+                            })}
+                    </View>
+                </ScrollView>
+            )}
         </View>
     );
 };

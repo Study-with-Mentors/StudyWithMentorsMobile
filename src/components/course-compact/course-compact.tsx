@@ -1,47 +1,10 @@
+import React from 'react';
 import {Course} from '../../types/course';
-import {View, Text, Image, StyleSheet, Dimensions} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import globalStyles from '../../styles/style';
+import {useNavigation} from '@react-navigation/native';
 
 const styles = StyleSheet.create({
-    courseContainer: {
-        overflow: 'hidden',
-        width: Dimensions.get('window').width * 0.45,
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: 'gray',
-        margin: 5,
-    },
-
-    courseName: {
-        fontSize: 18,
-        fontWeight: '500',
-        color: 'black',
-        marginBottom: 5,
-    },
-
-    mentor: {
-        fontSize: 15,
-        fontWeight: 'normal',
-    },
-
-    description: {
-        fontSize: 15,
-        fontWeight: '300',
-        color: 'gray',
-    },
-
-    descriptionContainer: {
-        padding: 10,
-        backgroundColor: 'white',
-    },
-
-    horizontal: {
-        flexDirection: 'row',
-    },
-
-    vertical: {
-        flexDirection: 'column',
-    },
-
     image: {
         width: '100%',
         height: 120,
@@ -49,22 +12,40 @@ const styles = StyleSheet.create({
 });
 
 const CourseCompact = ({course}: {course: Partial<Course>}) => {
-    // TODO: cut the overflown description text
     // TODO: replace Image with data from backend
     // TODO: make this touchable to navigate to course detail
+    const navigation = useNavigation();
     return (
-        <View style={[styles.vertical, styles.courseContainer]}>
-            <Image
-                source={{uri: 'https://reactjs.org/logo-og.png'}}
-                style={styles.image}
-            />
-            <View style={styles.descriptionContainer}>
-                <Text style={styles.courseName}>{course.shortName}</Text>
-                <Text style={styles.mentor}>
-                    {course.mentor?.firstName} {course.mentor?.lastName}
-                </Text>
-                <Text style={styles.description}>{course.description}</Text>
-            </View>
+        <View
+            style={[
+                globalStyles.vertical,
+                globalStyles.courseCompactContainer,
+            ]}>
+            <TouchableOpacity
+                onPress={() =>
+                    navigation.navigate('CourseDetail', {
+                        screen: 'CourseDetail',
+                        params: {
+                            courseId: course.id,
+                        },
+                    })
+                } style={{flex: 1}}>
+                <Image
+                    source={{uri: 'https://reactjs.org/logo-og.png'}}
+                    style={styles.image}
+                />
+                <View style={globalStyles.descriptionContainer}>
+                    <Text style={globalStyles.courseName}>
+                        {course.shortName}
+                    </Text>
+                    <Text style={globalStyles.mentor}>
+                        {course.mentor?.firstName} {course.mentor?.lastName}
+                    </Text>
+                    <Text style={globalStyles.description} numberOfLines={3}>
+                        {course.description}
+                    </Text>
+                </View>
+            </TouchableOpacity>
         </View>
     );
 };

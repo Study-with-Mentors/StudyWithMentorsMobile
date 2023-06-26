@@ -1,6 +1,6 @@
 import {Formik} from 'formik';
 import {Image, Text, TextInput, TouchableOpacity, View} from 'react-native';
-import styles from '../../../style';
+import globalStyles from '../../../styles/style';
 import {Gender, User} from '../../../types/user';
 import ButtonCustom from '../../../components/button-custom/button-custom';
 import React from 'react';
@@ -49,7 +49,7 @@ const ProfileScreen = () => {
 
     // TODO: add icon for text
     return (
-        <View style={styles.topView}>
+        <View style={globalStyles.centerView}>
             <Formik
                 validate={validate}
                 initialValues={user}
@@ -63,7 +63,7 @@ const ProfileScreen = () => {
                     touched,
                     setFieldValue,
                 }) => (
-                    <View style={styles.formContainer}>
+                    <View style={globalStyles.formContainer}>
                         {/*TODO: take picture from camera*/}
                         <Image
                             source={{uri: user.profileImage}}
@@ -71,56 +71,66 @@ const ProfileScreen = () => {
                         />
                         <View
                             style={[
-                                styles.horizontal,
+                                globalStyles.horizontal,
                                 {
                                     width: '100%',
                                     columnGap: 5,
                                 },
                             ]}>
-                            <View style={[styles.inputContainer, {flex: 1}]}>
+                            <View
+                                style={[
+                                    globalStyles.inputContainer,
+                                    {flex: 1},
+                                ]}>
                                 <Text>First name</Text>
                                 <TextInput
-                                    style={styles.textInput}
+                                    style={globalStyles.textInput}
                                     onChangeText={handleChange('firstName')}
                                     onBlur={handleBlur('firstName')}
                                     value={values.firstName}
                                 />
                                 {errors.firstName && touched.firstName ? (
-                                    <Text style={styles.error}>
+                                    <Text style={globalStyles.error}>
                                         {errors.firstName}
                                     </Text>
                                 ) : null}
                             </View>
 
-                            <View style={[styles.inputContainer, {flex: 1}]}>
+                            <View
+                                style={[
+                                    globalStyles.inputContainer,
+                                    {flex: 1},
+                                ]}>
                                 <Text>Last name</Text>
                                 <TextInput
-                                    style={styles.textInput}
+                                    style={globalStyles.textInput}
                                     onChangeText={handleChange('lastName')}
                                     onBlur={handleBlur('lastName')}
                                     value={values.lastName}
                                 />
                                 {errors.lastName && touched.lastName ? (
-                                    <Text style={styles.error}>
+                                    <Text style={globalStyles.error}>
                                         {errors.lastName}
                                     </Text>
                                 ) : null}
                             </View>
                         </View>
 
-                        <View style={styles.inputContainer}>
+                        <View style={globalStyles.inputContainer}>
                             <Text>Email</Text>
                             <TextInput
-                                style={styles.textInput}
+                                style={globalStyles.textInput}
                                 onChangeText={handleChange('email')}
                                 onBlur={handleBlur('email')}
                                 value={values.email}
                             />
                             {errors.email && touched.email ? (
-                                <Text style={styles.error}>{errors.email}</Text>
+                                <Text style={globalStyles.error}>
+                                    {errors.email}
+                                </Text>
                             ) : null}
                         </View>
-                        <View style={styles.inputContainer}>
+                        <View style={globalStyles.inputContainer}>
                             <Text>Birthdate</Text>
                             {/*TODO: change text style */}
                             <TouchableOpacity
@@ -137,12 +147,12 @@ const ProfileScreen = () => {
                                     editable={false}
                                     selectTextOnFocus={false}
                                     pointerEvents="none"
-                                    style={styles.textInput}
+                                    style={globalStyles.textInput}
                                     value={values.birthdate.toDateString()}
                                 />
                             </TouchableOpacity>
                             {errors.birthdate && touched.birthdate ? (
-                                <Text style={styles.error}>
+                                <Text style={globalStyles.error}>
                                     {/*{errors.birthdate?.toDateString()}*/}
                                 </Text>
                             ) : null}

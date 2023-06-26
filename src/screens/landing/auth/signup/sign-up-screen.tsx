@@ -1,6 +1,6 @@
 import {Formik} from 'formik';
 import {Text, TextInput, View} from 'react-native';
-import styles from '../../../../style';
+import globalStyles from '../../../../styles/style';
 import React from 'react';
 import ButtonCustom from '../../../../components/button-custom/button-custom';
 import {NavigationProp} from '@react-navigation/native';
@@ -38,8 +38,9 @@ const validate = (values: RegisterState) => {
 };
 
 const SignUpScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
+    // TODO: api call
     return (
-        <View style={styles.centerView}>
+        <View style={globalStyles.centerView}>
             <Formik
                 validate={validate}
                 initialValues={{email: '', password: '', retypePassword: ''}}
@@ -52,23 +53,25 @@ const SignUpScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
                     errors,
                     touched,
                 }) => (
-                    <View style={styles.formContainer}>
-                        <Text style={styles.heading1}>Sign Up</Text>
-                        <View style={styles.inputContainer}>
+                    <View style={globalStyles.formContainer}>
+                        <Text style={globalStyles.heading1}>Sign Up</Text>
+                        <View style={globalStyles.inputContainer}>
                             <TextInput
-                                style={[styles.textInput, {width: '100%'}]}
+                                style={globalStyles.textInput}
                                 onChangeText={handleChange('email')}
                                 onBlur={handleBlur('email')}
                                 placeholder="Email"
                                 value={values.email}
                             />
                             {errors.email && touched.email ? (
-                                <Text style={styles.error}>{errors.email}</Text>
+                                <Text style={globalStyles.error}>
+                                    {errors.email}
+                                </Text>
                             ) : null}
                         </View>
-                        <View style={styles.inputContainer}>
+                        <View style={globalStyles.inputContainer}>
                             <TextInput
-                                style={[styles.textInput, {width: '100%'}]}
+                                style={globalStyles.textInput}
                                 onChangeText={handleChange('password')}
                                 onBlur={handleBlur('password')}
                                 secureTextEntry={true}
@@ -76,14 +79,14 @@ const SignUpScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
                                 value={values.password}
                             />
                             {errors.password && touched.password ? (
-                                <Text style={styles.error}>
+                                <Text style={globalStyles.error}>
                                     {errors.password}
                                 </Text>
                             ) : null}
                         </View>
-                        <View style={styles.inputContainer}>
+                        <View style={globalStyles.inputContainer}>
                             <TextInput
-                                style={[styles.textInput, {width: '100%'}]}
+                                style={globalStyles.textInput}
                                 onChangeText={handleChange('retypePassword')}
                                 onBlur={handleBlur('retypePassword')}
                                 secureTextEntry={true}
@@ -91,7 +94,7 @@ const SignUpScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
                                 value={values.retypePassword}
                             />
                             {errors.retypePassword && touched.retypePassword ? (
-                                <Text style={styles.error}>
+                                <Text style={globalStyles.error}>
                                     {errors.retypePassword}
                                 </Text>
                             ) : null}
@@ -99,13 +102,9 @@ const SignUpScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
                         <ButtonCustom onPress={handleSubmit} title="Sign Up" />
                         <Text
                             onPress={() => navigation.navigate('Login')}
-                            style={{marginTop: 15}}>
+                            style={globalStyles.marginTop}>
                             Already have an account?{' '}
-                            <Text
-                                style={{
-                                    color: 'blue',
-                                    textDecorationLine: 'underline',
-                                }}>
+                            <Text style={globalStyles.underlineText}>
                                 Login
                             </Text>
                         </Text>

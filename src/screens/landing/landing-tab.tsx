@@ -9,7 +9,7 @@ const Tab = createBottomTabNavigator();
 
 const LandingTab = () => {
     return (
-        <Tab.Navigator>
+        <Tab.Navigator screenOptions={{headerShown: false}}>
             {/*TODO: change this homescreen to discover screen*/}
             <Tab.Screen
                 name="Home"
