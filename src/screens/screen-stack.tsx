@@ -3,7 +3,7 @@ import LoggedTab from './logged/logged-tab';
 import LandingTab from './landing/landing-tab';
 import CourseStack from './course/course-stack';
 import React, {useEffect, useState} from 'react';
-import {getAccessToken} from "../utils/http";
+import {getAccessToken, saveAccessToken} from '../utils/http';
 
 const Stack = createNativeStackNavigator();
 type ContextType = {
@@ -11,22 +11,24 @@ type ContextType = {
     setSearchKey: Function;
     isSearch: boolean;
     setIsSearch: Function;
-    auth: string;
-    setAuth: Function;
+    setAuthToken: Function;
 };
 
 export const AppContext = React.createContext<ContextType>({} as ContextType);
 
 const AppScreenStack = () => {
-    useEffect(() => {
-        const token = getAccessToken();
-        console.log(token);
+    const setAuthToken = (token: string) => {
+        saveAccessToken(token).then();
         setAuth(token);
-    }, []);
+    };
 
     const [searchKey, setSearchKey] = useState('');
     const [isSearch, setIsSearch] = useState(false);
     const [auth, setAuth] = useState('');
+    useEffect(() => {
+        getAccessToken().then(result => setAuth(result));
+    }, []);
+
     return (
         <AppContext.Provider
             value={{
@@ -34,14 +36,16 @@ const AppScreenStack = () => {
                 setSearchKey,
                 isSearch,
                 setIsSearch,
-                auth,
-                setAuth,
+                setAuthToken,
             }}>
             <Stack.Navigator
                 initialRouteName="Landing"
                 screenOptions={{headerShown: false}}>
-                <Stack.Screen name="Landing" component={LandingTab} />
-                <Stack.Screen name="Logged" component={LoggedTab} />
+                {auth ? (
+                    <Stack.Screen name="Logged" component={LoggedTab} />
+                ) : (
+                    <Stack.Screen name="Landing" component={LandingTab} />
+                )}
                 <Stack.Screen
                     name="CourseDetailStack"
                     component={CourseStack}

@@ -1,5 +1,4 @@
 import http, {getAccessToken, toQueryParams} from '../utils/http';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export type GetLessonByDateParams = {
     lowerTime: string;

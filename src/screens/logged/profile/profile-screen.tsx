@@ -3,10 +3,11 @@ import {Image, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import globalStyles from '../../../styles/style';
 import {Gender, User} from '../../../types/user';
 import ButtonCustom from '../../../components/button-custom/button-custom';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
 import LoadingIndicator from '../../../components/loading-indicator/loading-indicator';
 import {UserAPI} from '../../../api/user-api';
+import {AppContext} from "../../screen-stack";
 
 const validate = (values: User) => {
     const errors: Partial<User> = {
@@ -38,9 +39,9 @@ const validate = (values: User) => {
 };
 
 const ProfileScreen = () => {
-    // TODO: get current user information
     const [user, setUser] = useState({} as User);
     const [loading, setLoading] = useState(false);
+    const {setAuthToken} = useContext(AppContext);
 
     useEffect(() => {
         setLoading(true);
@@ -51,7 +52,7 @@ const ProfileScreen = () => {
             .finally(() => setLoading(false));
     }, []);
 
-    if (loading || true) {
+    if (loading) {
         return <LoadingIndicator loadingText={'Loading profile'} />;
     }
 
@@ -147,7 +148,7 @@ const ProfileScreen = () => {
                                         mode: 'date',
                                         onChange: (e, date) =>
                                             setFieldValue('birthdate', date),
-                                        value: values.birthdate,
+                                        value: new Date(),
                                     });
                                 }}>
                                 <TextInput
@@ -155,7 +156,7 @@ const ProfileScreen = () => {
                                     selectTextOnFocus={false}
                                     pointerEvents="none"
                                     style={globalStyles.textInput}
-                                    value={values.birthdate.toDateString()}
+                                    value={undefined}
                                 />
                             </TouchableOpacity>
                             {errors.birthdate && touched.birthdate ? (
@@ -172,7 +173,7 @@ const ProfileScreen = () => {
                             title="Change password"
                         />
                         <ButtonCustom
-                            onPress={() => console.log('Log out')}
+                            onPress={() => setAuthToken('')}
                             title="Log out"
                         />
                     </View>

@@ -6,8 +6,9 @@ import ButtonCustom from '../../../../components/button-custom/button-custom';
 import {NavigationProp} from '@react-navigation/native';
 import {UserAPI} from '../../../../api/user-api';
 import {useState} from 'react/index';
-import {saveAccessToken} from "../../../../utils/http";
-import {AppContext} from "../../../screen-stack";
+import {saveAccessToken} from '../../../../utils/http';
+import {AppContext} from '../../../screen-stack';
+import LoadingIndicator from '../../../../components/loading-indicator/loading-indicator';
 
 interface LoginState {
     email: string;
@@ -33,20 +34,22 @@ const validate = (values: LoginState) => {
 const LoginScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
-    const {setAuth} = useContext(AppContext);
+    const {setAuthToken} = useContext(AppContext);
     const login = (values: LoginState): void => {
         setLoading(true);
         UserAPI.login({email: values.email, password: values.password})
             .then(response => {
-                saveAccessToken(response);
-                setAuth(response);
+                setAuthToken(response);
                 navigation.navigate('Logged', {screen: 'Home'});
             })
             .catch(_error => setMessage('Wrong email or password'))
             .finally(() => setLoading(false));
     };
 
-    // TODO: loading icon
+    if (loading) {
+        return <LoadingIndicator loadingText={'Logging in'} />;
+    }
+
     return (
         <View style={globalStyles.centerView}>
             <Formik
@@ -96,7 +99,9 @@ const LoginScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
                                 </Text>
                             ) : null}
                         </View>
-                        <Text style={globalStyles.error}>{message}</Text>
+                        {!loading && (
+                            <Text style={globalStyles.error}>{message}</Text>
+                        )}
                         <ButtonCustom
                             onPress={handleSubmit}
                             title="Login"

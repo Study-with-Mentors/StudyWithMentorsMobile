@@ -48,7 +48,7 @@ export const UserAPI = {
     getByUserToken: async () => {
         const res = await http.get('/user/profile', {
             headers: {
-                Authorization: 'Bearer ' + getAccessToken(),
+                Authorization: 'Bearer ' + (await getAccessToken()),
             },
         });
         return res?.data;
