@@ -25,14 +25,18 @@ const globalStyles = StyleSheet.create({
     },
 
     heading1: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: 'blue',
+        fontSize: 18,
+        fontWeight: '500',
+        color: 'black',
     },
 
     heading2: {
         fontSize: 16,
         fontWeight: 'bold',
+    },
+
+    shadowBottom: {
+        elevation: 5,
     },
 
     alignLeft: {

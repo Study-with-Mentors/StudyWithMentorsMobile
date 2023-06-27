@@ -57,6 +57,14 @@ export const UserAPI = {
         const res = await http.get(`/user/profile/${id}`);
         return res?.data;
     },
+    getMentorProfileById: async (id: string) => {
+        const res = await http.get(`/mentor/${id}`);
+        return res?.data;
+    },
+    getMentorList: async () => {
+        const res = await http.get('/mentor');
+        return res?.data;
+    },
     uploadImageProfile: async (params: UploadImageProfileProps) => {
         const res = await http.put('/user/profile', params, {
             headers: {

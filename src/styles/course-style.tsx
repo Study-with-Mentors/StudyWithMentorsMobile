@@ -8,9 +8,8 @@ const courseStyle = StyleSheet.create({
 
     courseName: {
         fontSize: 18,
-        fontWeight: '500',
+        fontWeight: 'bold',
         color: 'black',
-        marginBottom: 5,
     },
 
     text: {
@@ -19,7 +18,7 @@ const courseStyle = StyleSheet.create({
     },
 
     subText: {
-        fontSize: 15,
+        fontSize: 14,
     },
 
     mentor: {
@@ -47,6 +46,7 @@ const courseStyle = StyleSheet.create({
     sessionName: {
         fontWeight: 'bold',
         fontSize: 15,
+        color: '#333333',
     },
 
     sessionDescription: {},
@@ -60,7 +60,7 @@ const courseStyle = StyleSheet.create({
     description: {
         fontSize: 15,
         fontWeight: '300',
-        color: 'gray',
+        color: '#111111',
     },
 
     descriptionContainer: {

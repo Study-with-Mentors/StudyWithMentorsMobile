@@ -3,8 +3,10 @@ import {Image, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import globalStyles from '../../../styles/style';
 import {Gender, User} from '../../../types/user';
 import ButtonCustom from '../../../components/button-custom/button-custom';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
+import LoadingIndicator from '../../../components/loading-indicator/loading-indicator';
+import {UserAPI} from '../../../api/user-api';
 
 const validate = (values: User) => {
     const errors: Partial<User> = {
@@ -37,15 +39,21 @@ const validate = (values: User) => {
 
 const ProfileScreen = () => {
     // TODO: get current user information
-    let user: User = {
-        id: 'someid',
-        email: 'user@gmail.com',
-        firstName: 'user',
-        lastName: 'Nguyen',
-        birthdate: new Date('2002-2-22'),
-        profileImage: 'https://reactjs.org/logo-og.png',
-        gender: Gender.MALE,
-    };
+    const [user, setUser] = useState({} as User);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        setLoading(true);
+        UserAPI.getByUserToken()
+            .then(response => {
+                setUser(response);
+            })
+            .finally(() => setLoading(false));
+    }, []);
+
+    if (loading || true) {
+        return <LoadingIndicator loadingText={'Loading profile'} />;
+    }
 
     // TODO: add icon for text
     return (
@@ -66,7 +74,7 @@ const ProfileScreen = () => {
                     <View style={globalStyles.formContainer}>
                         {/*TODO: take picture from camera*/}
                         <Image
-                            source={{uri: user.profileImage}}
+                            source={{uri: user.profileImage?.url}}
                             style={{width: 100, height: 100, borderRadius: 100}}
                         />
                         <View
@@ -135,7 +143,6 @@ const ProfileScreen = () => {
                             {/*TODO: change text style */}
                             <TouchableOpacity
                                 onPress={() => {
-                                    console.log('Press');
                                     DateTimePickerAndroid.open({
                                         mode: 'date',
                                         onChange: (e, date) =>

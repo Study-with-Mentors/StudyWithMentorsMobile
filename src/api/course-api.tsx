@@ -55,18 +55,4 @@ export const CourseAPI = {
             throw error;
         }
     },
-    // TODO: remove the create course
-    createCourse: async (createCourseParams: CreateCourseParams) => {
-        try {
-            const res = await http.post('/course', createCourseParams, {
-                headers: {
-                    Authorization: 'Bearer ' + getAccessToken(),
-                },
-            });
-
-            return res;
-        } catch (error) {
-            throw error;
-        }
-    },
 };

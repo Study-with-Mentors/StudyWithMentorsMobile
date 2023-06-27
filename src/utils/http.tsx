@@ -1,7 +1,7 @@
 import axios, {AxiosInstance} from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-class Http {
+export class Http {
     instance: AxiosInstance;
     constructor() {
         this.instance = axios.create({
@@ -15,19 +15,12 @@ class Http {
     }
 }
 
-export const getAccessToken = (): string => {
-    let access_token;
-    AsyncStorage.getItem('access_token').then(data => {
-        access_token = data;
-    });
-    if (access_token) {
-        return access_token;
-    }
-    return '';
+export const getAccessToken = async (): Promise<string | null> => {
+    return AsyncStorage.getItem('access_token');
 };
 
-export const saveAccessToken = (accessToken: string) => {
-    AsyncStorage.setItem('access_token', accessToken).then();
+export const saveAccessToken = async (accessToken: string) => {
+    await AsyncStorage.setItem('access_token', accessToken);
 };
 
 export const toQueryParams = (data: any): string => {

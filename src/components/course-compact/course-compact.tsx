@@ -12,8 +12,6 @@ const styles = StyleSheet.create({
 });
 
 const CourseCompact = ({course}: {course: Partial<Course>}) => {
-    // TODO: replace Image with data from backend
-    // TODO: make this touchable to navigate to course detail
     const navigation = useNavigation();
     return (
         <View

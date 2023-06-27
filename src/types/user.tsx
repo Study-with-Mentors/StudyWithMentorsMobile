@@ -1,4 +1,5 @@
 import {Field} from './field';
+import {Image} from "./image";
 
 export type User = {
     id: string;
@@ -6,7 +7,7 @@ export type User = {
     firstName: string;
     lastName: string;
     birthdate: Date;
-    profileImage: string;
+    profileImage: Image;
     gender: Gender;
     student: Partial<Student>;
     mentor: Partial<Mentor>;

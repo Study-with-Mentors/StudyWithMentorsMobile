@@ -1,5 +1,5 @@
 import {Formik} from 'formik';
-import {Text, TextInput, View} from 'react-native';
+import {Image, Text, TextInput, View} from 'react-native';
 import globalStyles from '../../../../styles/style';
 import React from 'react';
 import ButtonCustom from '../../../../components/button-custom/button-custom';
@@ -54,6 +54,8 @@ const SignUpScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
                     touched,
                 }) => (
                     <View style={globalStyles.formContainer}>
+                        {/*TODO: logo color*/}
+                        <Image source={require("../../../../components/toolbar/logo.png")} />
                         <Text style={globalStyles.heading1}>Sign Up</Text>
                         <View style={globalStyles.inputContainer}>
                             <TextInput

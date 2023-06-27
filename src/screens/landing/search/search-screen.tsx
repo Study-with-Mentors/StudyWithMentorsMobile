@@ -31,6 +31,8 @@ const SearchScreen = () => {
         <View style={{flex: 1}}>
             <ToolbarCustom title={'Search'} />
             {/*TODO: it is missing some text at the end of scoll view*/}
+            {/*TODO: bug when there is only one course*/}
+            {/*TODO: filter function*/}
             {loading ? (
                 <LoadingIndicator loadingText={'Loading courses'} />
             ) : (

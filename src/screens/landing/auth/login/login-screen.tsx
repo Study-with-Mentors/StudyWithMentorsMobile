@@ -1,12 +1,13 @@
 import {Formik} from 'formik';
-import {Text, TextInput, View} from 'react-native';
+import {Image, Text, TextInput, View} from 'react-native';
 import globalStyles from '../../../../styles/style';
-import React from 'react';
+import React, {useContext} from 'react';
 import ButtonCustom from '../../../../components/button-custom/button-custom';
 import {NavigationProp} from '@react-navigation/native';
 import {UserAPI} from '../../../../api/user-api';
-import {saveAccessToken} from '../../../../utils/http';
 import {useState} from 'react/index';
+import {saveAccessToken} from "../../../../utils/http";
+import {AppContext} from "../../../screen-stack";
 
 interface LoginState {
     email: string;
@@ -32,15 +33,17 @@ const validate = (values: LoginState) => {
 const LoginScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
+    const {setAuth} = useContext(AppContext);
     const login = (values: LoginState): void => {
         setLoading(true);
         UserAPI.login({email: values.email, password: values.password})
             .then(response => {
                 saveAccessToken(response);
+                setAuth(response);
                 navigation.navigate('Logged', {screen: 'Home'});
-                setLoading(false);
             })
-            .catch(_error => setMessage('Wrong email or password'));
+            .catch(_error => setMessage('Wrong email or password'))
+            .finally(() => setLoading(false));
     };
 
     // TODO: loading icon
@@ -59,6 +62,10 @@ const LoginScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
                     touched,
                 }) => (
                     <View style={globalStyles.formContainer}>
+                        {/*TODO: logo color*/}
+                        <Image
+                            source={require('../../../../components/toolbar/logo.png')}
+                        />
                         <Text style={globalStyles.heading1}>Login</Text>
                         <View style={globalStyles.inputContainer}>
                             <TextInput
@@ -90,7 +97,11 @@ const LoginScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
                             ) : null}
                         </View>
                         <Text style={globalStyles.error}>{message}</Text>
-                        <ButtonCustom onPress={handleSubmit} title="Login" disabled={loading} />
+                        <ButtonCustom
+                            onPress={handleSubmit}
+                            title="Login"
+                            disabled={loading}
+                        />
                         <Text
                             onPress={() => navigation.navigate('SignUp')}
                             style={globalStyles.marginTop}>

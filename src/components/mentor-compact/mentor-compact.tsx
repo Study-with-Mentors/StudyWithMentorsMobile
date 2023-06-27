@@ -1,7 +1,9 @@
-import {Image, StyleSheet, View, Text} from 'react-native';
+import React from 'react';
+import {Image, StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import {User} from '../../types/user';
 import containerStyle from '../../styles/container-style';
 import globalStyles from '../../styles/style';
+import {useNavigation} from '@react-navigation/native';
 
 const styles = StyleSheet.create({
     mentorContainer: {
@@ -27,23 +29,36 @@ const styles = StyleSheet.create({
     vertical: {
         ...globalStyles.centerView,
         ...globalStyles.vertical,
-        // flexDirection: 'column',
-        // justifyContent: 'center',
-        // alignItems: 'center',
     },
 });
 
 const MentorCompact = ({mentor}: {mentor: Partial<User>}) => {
+    const navigation = useNavigation();
+    // FIXME: mentor image not in center
     return (
         <View style={[styles.vertical, styles.mentorContainer]}>
-            <Image
-                source={{uri: 'https://reactjs.org/logo-og.png'}}
-                style={styles.image}
-            />
-            <Text style={styles.mentorName}>
-                {mentor.firstName} {mentor.lastName}
-            </Text>
-            <Text style={globalStyles.textCenter}>{mentor.mentor?.bio}</Text>
+            <TouchableOpacity
+                style={{flex: 1}}
+                onPress={() =>
+                    navigation.navigate('CourseDetailStack', {
+                        screen: 'MentorDetail',
+                        params: {
+                            mentorId: mentor.id,
+                            mentor: mentor,
+                        },
+                    })
+                }>
+                <Image
+                    source={{uri: mentor.profileImage?.url}}
+                    style={styles.image}
+                />
+                <Text style={styles.mentorName}>
+                    {mentor.firstName} {mentor.lastName}
+                </Text>
+                <Text style={globalStyles.textCenter}>
+                    {mentor.mentor?.bio}
+                </Text>
+            </TouchableOpacity>
         </View>
     );
 };

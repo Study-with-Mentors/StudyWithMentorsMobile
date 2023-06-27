@@ -9,6 +9,8 @@ import ButtonCustom from '../button-custom/button-custom';
 import globalStyles from '../../styles/style';
 import {useNavigation} from '@react-navigation/native';
 import LoadingIndicator from '../loading-indicator/loading-indicator';
+import {User} from '../../types/user';
+import {UserAPI} from '../../api/user-api';
 
 const styles = StyleSheet.create({
     courseCompactContainer: {
@@ -26,18 +28,26 @@ const styles = StyleSheet.create({
 const CourseFull = ({courseId}: {courseId: string}) => {
     const [course, setCourse] = useState<Partial<Course>>();
     const [sessions, setSessions] = useState<Partial<Session>[]>();
+    const [mentorProfile, setMentorProfile] = useState<User>();
     const navigation = useNavigation();
     // TODO: API call error handler
     useEffect(() => {
-        CourseAPI.getById(courseId).then(response => {
-            console.log(response);
-            setCourse(response);
-        });
+        CourseAPI.getById(courseId)
+            .then(response => {
+                setCourse(response);
+            })
+            .catch(error => console.log(error.response));
         SessionAPI.getSessionByCourseID(courseId).then(response => {
             setSessions(response);
-        });
-        // TODO: get mentor profile by id
+        }).catch(error => console.log(error.response));
     }, [courseId]);
+    useEffect(() => {
+        if (course?.mentor?.id != null) {
+            UserAPI.getMentorProfileById(course.mentor.id).then(response =>
+                setMentorProfile(response),
+            );
+        }
+    }, [course]);
     if (course == null || sessions == null) {
         return <LoadingIndicator loadingText={'Loading course'} />;
     }
@@ -46,15 +56,21 @@ const CourseFull = ({courseId}: {courseId: string}) => {
         <ScrollView
             style={globalStyles.vertical}
             contentContainerStyle={[{gap: 5, backgroundColor: 'white'}]}>
-            <Image source={{uri: course.image?.url}} style={styles.image} />
+            <View style={globalStyles.shadowBottom}>
+                <Image source={{uri: course.image?.url}} style={styles.image} />
+            </View>
             <View style={{paddingHorizontal: 20, paddingVertical: 10, gap: 10}}>
                 {/*course*/}
-                <Text style={globalStyles.courseName}>{course.fullName}</Text>
-                <Text style={globalStyles.description}>
-                    {course.description}
-                </Text>
+                <View style={{marginBottom: 5}}>
+                    <Text style={[globalStyles.courseName, {fontSize: 22}]}>
+                        {course.fullName}
+                    </Text>
+                    <Text style={globalStyles.description}>
+                        {course.description}
+                    </Text>
+                </View>
                 <Line />
-                <View>
+                <View style={{paddingLeft: 20, gap: 10}}>
                     <Text style={globalStyles.subText}>
                         {/*TODO: add an icon and number of session*/}
                         {sessions.length} sessions
@@ -82,30 +98,33 @@ const CourseFull = ({courseId}: {courseId: string}) => {
                     </Text>
                 </View>
 
-                <View style={globalStyles.horizontal}>
-                    <Text style={globalStyles.mentor}>
-                        {course.mentor?.firstName} {course.mentor?.lastName}
-                    </Text>
-                    <Text style={globalStyles.subText}>
-                        {' '}
-                        - {course.field?.name}
-                    </Text>
-                </View>
                 <Line />
 
                 {/*mentor*/}
-                {/*TODO: make click go to mentor detail*/}
                 <View style={[globalStyles.horizontal, {gap: 25}]}>
                     <Image
-                        source={{uri: 'https://reactjs.org/logo-og.png'}}
+                        source={{uri: course.mentor?.profileImage?.url}}
                         style={globalStyles.mentorProfile}
                     />
                     <View>
-                        <Text style={globalStyles.courseName}>
+                        <Text
+                            style={globalStyles.courseName}
+                            onPress={() => {
+                                navigation.navigate('CourseDetailStack', {
+                                    screen: 'MentorDetail',
+                                    params: {
+                                        mentorId: course.mentor?.id,
+                                        mentor: course.mentor,
+                                    },
+                                });
+                            }}>
                             {course.mentor?.firstName} {course.mentor?.lastName}
                         </Text>
+                        <Text style={{marginBottom: 5}}>
+                            {mentorProfile?.mentor?.field?.name}
+                        </Text>
                         <Text style={globalStyles.description}>
-                            {course.mentor?.mentor?.bio}
+                            {mentorProfile?.mentor.bio}
                         </Text>
                     </View>
                 </View>
@@ -121,7 +140,7 @@ const CourseFull = ({courseId}: {courseId: string}) => {
                     }>
                     Sessions
                 </Text>
-                {sessions.map((s) => {
+                {sessions.map(s => {
                     // TODO: add style
                     return (
                         <View style={globalStyles.sessionContainer} key={s.id}>
@@ -136,10 +155,16 @@ const CourseFull = ({courseId}: {courseId: string}) => {
                 })}
                 {/*TODO: sticky button*/}
                 <ButtonCustom
+                    title={'Enroll in class'}
                     onPress={() => {
-                        console.log('enroll');
+                        navigation.navigate('CourseDetailStack', {
+                            screen: 'ClazzList',
+                            params: {
+                                courseId: course.id,
+                                course: course,
+                            },
+                        });
                     }}
-                    title={'Enroll'}
                 />
             </View>
         </ScrollView>
