@@ -9,7 +9,7 @@ export const ClassAPI = {
     getClassByUserToken: async () => {
         const res = await http.get('/student/clazz', {
             headers: {
-                Authorization: 'Bearer ' + getAccessToken(),
+                Authorization: 'Bearer ' + (await getAccessToken()),
             },
         });
         return res?.data;
@@ -17,7 +17,7 @@ export const ClassAPI = {
     getClassByCourse: async (courseId: string) => {
         const res = await http.get(`/course/${courseId}/clazz`, {
             headers: {
-                Authorization: 'Bearer ' + getAccessToken(),
+                Authorization: 'Bearer ' + (await getAccessToken()),
             },
         });
         return res?.data;
@@ -25,7 +25,7 @@ export const ClassAPI = {
     getClassById: async (clazzId: string) => {
         const res = await http.get(`/clazz/${clazzId}`, {
             headers: {
-                Authorization: 'Bearer ' + getAccessToken(),
+                Authorization: 'Bearer ' + (await getAccessToken()),
             },
         });
         return res?.data;
@@ -33,7 +33,7 @@ export const ClassAPI = {
     getLessonByUserToken: async (params: DateTimeFilter) => {
         const res = await http.get(`/student/lesson${toQueryParams(params)}`, {
             headers: {
-                Authorization: 'Bearer ' + getAccessToken(),
+                Authorization: 'Bearer ' + (await getAccessToken()),
             },
         });
         return res?.data;

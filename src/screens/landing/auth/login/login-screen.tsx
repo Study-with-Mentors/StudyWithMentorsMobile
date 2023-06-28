@@ -40,7 +40,6 @@ const LoginScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
         UserAPI.login({email: values.email, password: values.password})
             .then(response => {
                 setAuthToken(response);
-                navigation.navigate('Logged', {screen: 'Home'});
             })
             .catch(_error => setMessage('Wrong email or password'))
             .finally(() => setLoading(false));

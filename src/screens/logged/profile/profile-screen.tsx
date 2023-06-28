@@ -49,6 +49,7 @@ const ProfileScreen = () => {
             .then(response => {
                 setUser(response);
             })
+            .catch(error => console.log(error))
             .finally(() => setLoading(false));
     }, []);
 
@@ -77,6 +78,7 @@ const ProfileScreen = () => {
                         <Image
                             source={{uri: user.profileImage?.url}}
                             style={{width: 100, height: 100, borderRadius: 100}}
+                            defaultSource={require('../../../components/default-profile.png')}
                         />
                         <View
                             style={[

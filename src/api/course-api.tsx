@@ -47,7 +47,7 @@ export const CourseAPI = {
         try {
             const res = await http.get(`/course/${id}`, {
                 headers: {
-                    Authorization: 'Bearer ' + getAccessToken(),
+                    Authorization: 'Bearer ' + (await getAccessToken()),
                 },
             });
             return res.data;

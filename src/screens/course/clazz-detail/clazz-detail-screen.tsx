@@ -37,6 +37,7 @@ const ClazzDetailScreen = ({route}: {route: RouteProp<any>}) => {
             setLoading(true);
             ClassAPI.getClassById(clazzId)
                 .then(response => setClazz(response))
+                .catch(error => console.log(error))
                 .finally(() => setLoading(false));
         }
     }, [clazzId, loadedClazz]);
@@ -45,6 +46,7 @@ const ClazzDetailScreen = ({route}: {route: RouteProp<any>}) => {
             setLoadingCourse(true);
             CourseAPI.getById(clazz.courseId)
                 .then(response => setCourse(response))
+                .catch(error => console.log(error))
                 .finally(() => setLoadingCourse(false));
         }
     }, [clazz, loadedCourse, setCourse]);

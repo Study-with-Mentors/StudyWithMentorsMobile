@@ -30,6 +30,7 @@ const ClazzListScreen = ({route}: {route: RouteProp<any>}) => {
         setLoading(true);
         ClassAPI.getClassByCourse(courseId)
             .then(response => setClazzes(response))
+            .catch(error => console.log(error))
             .finally(() => setLoading(false));
     }, [courseId]);
 
