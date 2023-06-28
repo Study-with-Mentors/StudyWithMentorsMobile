@@ -4,7 +4,8 @@ import LandingTab from './landing/landing-tab';
 import CourseStack from './course/course-stack';
 import React, {useEffect, useState} from 'react';
 import {getAccessToken, saveAccessToken} from '../utils/http';
-import {useNavigation} from "@react-navigation/native";
+import {useNavigation} from '@react-navigation/native';
+import {SERVER_URL} from '@env';
 
 const Stack = createNativeStackNavigator();
 type ContextType = {
@@ -22,7 +23,6 @@ const AppScreenStack = () => {
     const setAuthToken = (token: string) => {
         saveAccessToken(token).then(() => {
             setAuth(token);
-            // navigation.navigate('Logged', {screen: 'Home'});
         });
     };
 
@@ -30,7 +30,9 @@ const AppScreenStack = () => {
     const [isSearch, setIsSearch] = useState(false);
     const [auth, setAuth] = useState('');
     useEffect(() => {
-        getAccessToken().then(result => setAuth(result));
+        getAccessToken().then(result => {
+            // setAuth(result);
+        });
     }, []);
 
     return (

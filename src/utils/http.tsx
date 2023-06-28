@@ -1,12 +1,13 @@
 import axios, {AxiosInstance} from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {SERVER_URL} from '@env';
 
 export class Http {
     instance: AxiosInstance;
     constructor() {
+        console.log(SERVER_URL);
         this.instance = axios.create({
-            baseURL:
-                'http://studywithmentor.ap-southeast-1.elasticbeanstalk.com/api',
+            baseURL: SERVER_URL,
             timeout: 10000,
             headers: {
                 'Content-Type': 'application/json',
