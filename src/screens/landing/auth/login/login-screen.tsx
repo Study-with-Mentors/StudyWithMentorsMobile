@@ -1,14 +1,19 @@
 import {Formik} from 'formik';
 import {Image, Text, TextInput, View} from 'react-native';
 import globalStyles from '../../../../styles/style';
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import ButtonCustom from '../../../../components/button-custom/button-custom';
-import {NavigationProp} from '@react-navigation/native';
+import {NavigationProp, RouteProp} from '@react-navigation/native';
 import {UserAPI} from '../../../../api/user-api';
 import {useState} from 'react/index';
 import {saveAccessToken} from '../../../../utils/http';
 import {AppContext} from '../../../screen-stack';
 import LoadingIndicator from '../../../../components/loading-indicator/loading-indicator';
+import {
+    GoogleSignin,
+    GoogleSigninButton,
+} from '@react-native-google-signin/google-signin';
+import {HttpStatusCode} from 'axios';
 
 interface LoginState {
     email: string;
@@ -31,17 +36,46 @@ const validate = (values: LoginState) => {
 
     return errors;
 };
-const LoginScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
+
+const LoginScreen = ({
+    navigation,
+    route,
+}: {
+    navigation: NavigationProp<any>;
+    route: RouteProp<any>;
+}) => {
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const {setAuthToken} = useContext(AppContext);
+
+    useEffect(() => {
+        setMessage(route.params?.message);
+    }, [route.params?.message, setMessage]);
+    const loginGoogle = () => {
+        setLoading(true);
+        GoogleSignin.signIn()
+            .then(user => {
+                UserAPI.loginGoogle(user.idToken)
+                    .then(response => setAuthToken(response))
+                    .catch(error => console.log(error.response));
+            })
+            .catch(error => console.log(error))
+            .finally(() => setLoading(false));
+    };
+
     const login = (values: LoginState): void => {
         setLoading(true);
         UserAPI.login({email: values.email, password: values.password})
             .then(response => {
                 setAuthToken(response);
             })
-            .catch(_error => setMessage('Wrong email or password'))
+            .catch(error => {
+                if (error.response.status === HttpStatusCode.Forbidden) {
+                    setMessage('Please verify your email first');
+                } else {
+                    setMessage('Wrong email or password');
+                }
+            })
             .finally(() => setLoading(false));
     };
 
@@ -64,9 +98,9 @@ const LoginScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
                     touched,
                 }) => (
                     <View style={globalStyles.formContainer}>
-                        {/*TODO: logo color*/}
                         <Image
-                            source={require('../../../../components/toolbar/logo.png')}
+                            style={{width: 150, height: 50}}
+                            source={require('../../../../components/toolbar/logo_black.png')}
                         />
                         <Text style={globalStyles.heading1}>Login</Text>
                         <View style={globalStyles.inputContainer}>
@@ -114,6 +148,7 @@ const LoginScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
                                 Sign Up
                             </Text>
                         </Text>
+                        <GoogleSigninButton onPress={loginGoogle} />
                     </View>
                 )}
             </Formik>

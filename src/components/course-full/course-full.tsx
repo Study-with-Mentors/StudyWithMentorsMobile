@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+    Image,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native';
 import {Course} from '../../types/course';
 import Line from '../line/line';
 import {CourseAPI} from '../../api/course-api';
@@ -11,6 +18,7 @@ import {useNavigation} from '@react-navigation/native';
 import LoadingIndicator from '../loading-indicator/loading-indicator';
 import {User} from '../../types/user';
 import {UserAPI} from '../../api/user-api';
+import {Icon} from 'react-native-elements';
 
 const styles = StyleSheet.create({
     courseCompactContainer: {
@@ -30,16 +38,17 @@ const CourseFull = ({courseId}: {courseId: string}) => {
     const [sessions, setSessions] = useState<Partial<Session>[]>();
     const [mentorProfile, setMentorProfile] = useState<User>();
     const navigation = useNavigation();
-    // TODO: API call error handler
     useEffect(() => {
         CourseAPI.getById(courseId)
             .then(response => {
                 setCourse(response);
             })
             .catch(error => console.log(error.response));
-        SessionAPI.getSessionByCourseID(courseId).then(response => {
-            setSessions(response);
-        }).catch(error => console.log(error.response));
+        SessionAPI.getSessionByCourseID(courseId)
+            .then(response => {
+                setSessions(response);
+            })
+            .catch(error => console.log(error.response));
     }, [courseId]);
     useEffect(() => {
         if (course?.mentor?.id != null) {
@@ -131,15 +140,22 @@ const CourseFull = ({courseId}: {courseId: string}) => {
 
                 <Line />
 
-                <Text
-                    style={globalStyles.heading1}
+                <TouchableOpacity
+                    style={{
+                        flex: 1,
+                        marginTop: 5,
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                    }}
                     onPress={() =>
                         navigation.navigate('SessionDetails', {
                             courseId: course.id,
                         })
                     }>
-                    Sessions
-                </Text>
+                    <Text style={globalStyles.heading1}>Sessions</Text>
+                    <Icon name={'chevron-right'} />
+                </TouchableOpacity>
                 {sessions.map(s => {
                     // TODO: add style
                     return (

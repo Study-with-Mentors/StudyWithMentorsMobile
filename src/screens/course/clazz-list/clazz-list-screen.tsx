@@ -67,12 +67,21 @@ const ClazzListScreen = ({route}: {route: RouteProp<any>}) => {
                             </Text>
                         </View>
                     </View>
-                    <View>
+                    <View
+                        style={{
+                            paddingHorizontal: 20,
+                            paddingVertical: 10,
+                            gap: 10,
+                        }}>
+                        <Text style={globalStyles.heading1}>
+                            Openning Classes
+                        </Text>
                         {clazzes
                             .filter(clazz => clazz.status === ClazzStatus.OPEN)
                             .map(clazz => {
                                 return (
                                     <ClazzCompact
+                                        key={clazz.id}
                                         clazz={clazz}
                                         course={course}
                                     />

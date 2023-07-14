@@ -21,4 +21,12 @@ export const LessionAPI = {
             throw error;
         }
     },
+    getLessonByClass: async (clazzId: string) => {
+        try {
+            const res = await http.get(`/clazz/${clazzId}/lesson`);
+            return res.data;
+        } catch (error) {
+            throw error;
+        }
+    },
 };

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {ScrollView, Text, View} from 'react-native';
+import {ScrollView, Text} from 'react-native';
 import globalStyles from '../../../../styles/style';
 import CourseCompact from '../../../../components/course-compact/course-compact';
 import MentorCompact from '../../../../components/mentor-compact/mentor-compact';
@@ -24,23 +24,30 @@ const HomeScreen = () => {
                 setCourses(response.result);
                 setCourseLoading(false);
             })
-            .catch(error => console.log(error.response));
+            .catch(error =>
+                console.log('Error in home screen: ' + error.response),
+            );
         setMentorLoading(true);
         UserAPI.getMentorList().then(response => {
             setMentors(response.result);
             setMentorLoading(false);
         });
     }, []);
-    // TODO: get mentor
     return (
-        <View style={{flex: 1}}>
+        <ScrollView style={{flex: 1}} stickyHeaderIndices={[0]}>
             <ToolbarCustom title={'Home'} />
             <ScrollView
                 contentContainerStyle={[
                     globalStyles.topView,
                     {gap: 10, paddingLeft: 5},
                 ]}>
-                <Text style={[globalStyles.heading1]}>Popular course</Text>
+                <Text
+                    style={[
+                        globalStyles.heading1,
+                        {paddingHorizontal: 15, paddingVertical: 7},
+                    ]}>
+                    Popular course
+                </Text>
                 {courseLoading ? (
                     <LoadingIndicator loadingText={'Loading courses'} />
                 ) : (
@@ -54,7 +61,13 @@ const HomeScreen = () => {
                         ))}
                     </ScrollView>
                 )}
-                <Text style={[globalStyles.heading1]}>Popular mentor</Text>
+                <Text
+                    style={[
+                        globalStyles.heading1,
+                        {paddingHorizontal: 15, paddingVertical: 7},
+                    ]}>
+                    Popular mentor
+                </Text>
                 {mentorLoading ? (
                     <LoadingIndicator loadingText={'Load mentors'} />
                 ) : (
@@ -70,7 +83,7 @@ const HomeScreen = () => {
                     </ScrollView>
                 )}
             </ScrollView>
-        </View>
+        </ScrollView>
     );
 };
 

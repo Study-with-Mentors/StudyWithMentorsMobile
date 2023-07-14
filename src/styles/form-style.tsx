@@ -18,6 +18,7 @@ const formStyle = StyleSheet.create({
         borderStyle: 'solid',
         borderWidth: 1,
         borderColor: 'gray',
+        color: 'black',
         padding: 5,
         paddingHorizontal: 15,
         marginBottom: 5,

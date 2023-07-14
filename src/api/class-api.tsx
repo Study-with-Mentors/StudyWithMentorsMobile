@@ -15,19 +15,11 @@ export const ClassAPI = {
         return res?.data;
     },
     getClassByCourse: async (courseId: string) => {
-        const res = await http.get(`/course/${courseId}/clazz`, {
-            headers: {
-                Authorization: 'Bearer ' + (await getAccessToken()),
-            },
-        });
+        const res = await http.get(`/course/${courseId}/clazz`);
         return res?.data;
     },
     getClassById: async (clazzId: string) => {
-        const res = await http.get(`/clazz/${clazzId}`, {
-            headers: {
-                Authorization: 'Bearer ' + (await getAccessToken()),
-            },
-        });
+        const res = await http.get(`/clazz/${clazzId}`);
         return res?.data;
     },
     getLessonByUserToken: async (params: DateTimeFilter) => {

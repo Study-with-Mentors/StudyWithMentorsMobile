@@ -44,9 +44,11 @@ const CalendarScreen = () => {
         let agenda: AgendaSchedule = {} as AgendaSchedule;
         lessons.map(lesson => {
             let date = lesson.startTime.split('T')[0];
+            const startTime = lesson.startTime.split('T')[1].substring(0, 5);
+            const endTime = lesson.endTime.split('T')[1].substring(0, 5);
             let val: AgendaEntry = {
                 day: date,
-                name: lesson.sessionName,
+                name: `${startTime} - ${endTime}\nCourse: ${lesson.courseName}\n${lesson.sessionName}`,
                 height: 80,
             } as AgendaEntry;
             if (agenda[date] == null) {
@@ -106,7 +108,7 @@ const CalendarScreen = () => {
                                 // testID={testIDs.agenda.ITEM}
                                 style={[
                                     styles.item,
-                                    {height: reservation.height},
+                                    // {height: reservation.height},
                                 ]}>
                                 <Text style={{fontSize, color}}>
                                     {reservation.name}
@@ -116,8 +118,6 @@ const CalendarScreen = () => {
                     }}
                     // Max amount of months allowed to scroll to the past. Default = 50
                     selected={selectedDate.toDateString()}
-                    // minDate={'2023-05-10'}
-                    // maxDate={'2024-05-30'}
                     pastScrollRange={12}
                     futureScrollRange={12}
                     showClosingKnob={true}

@@ -6,7 +6,7 @@ import {Session} from '../../types/session';
 import LoadingIndicator from '../loading-indicator/loading-indicator';
 import {Course} from '../../types/course';
 import {CourseAPI} from '../../api/course-api';
-import Line from "../line/line";
+import Line from '../line/line';
 
 const SessionList = ({courseId}: {courseId: string}) => {
     const [sessions, setSessions] = useState<Session[]>([]);
@@ -32,7 +32,6 @@ const SessionList = ({courseId}: {courseId: string}) => {
     return (
         <View style={{padding: 10, gap: 5}}>
             <Text style={globalStyles.heading1}>{course.fullName}</Text>
-            {/*TODO: bigger heading*/}
             <Text style={globalStyles.heading2}>Session Detail</Text>
             {sessions.map(s => {
                 return (

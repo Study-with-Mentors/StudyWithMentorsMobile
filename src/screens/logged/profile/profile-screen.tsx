@@ -7,14 +7,11 @@ import React, {useContext, useEffect, useState} from 'react';
 import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
 import LoadingIndicator from '../../../components/loading-indicator/loading-indicator';
 import {UserAPI} from '../../../api/user-api';
-import {AppContext} from "../../screen-stack";
+import {AppContext} from '../../screen-stack';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 const validate = (values: User) => {
-    const errors: Partial<User> = {
-        firstName: '',
-        lastName: '',
-        email: '',
-    };
+    const errors: Partial<User> = {};
     if (!values.email) {
         errors.email = 'Email is required';
     } else if (
@@ -39,8 +36,9 @@ const validate = (values: User) => {
 };
 
 const ProfileScreen = () => {
-    const [user, setUser] = useState({} as User);
+    const [user, setUser] = useState<User>({} as User);
     const [loading, setLoading] = useState(false);
+    const [birthdate, setBirthdate] = useState<Date>(new Date());
     const {setAuthToken} = useContext(AppContext);
 
     useEffect(() => {
@@ -48,10 +46,20 @@ const ProfileScreen = () => {
         UserAPI.getByUserToken()
             .then(response => {
                 setUser(response);
+                setBirthdate(new Date(response.birthdate));
             })
             .catch(error => console.log(error))
             .finally(() => setLoading(false));
     }, []);
+
+    const updateProfile = values => {
+        UserAPI.updateUser(values)
+            .then(response => {
+                setUser(response);
+                setBirthdate(new Date(response.birthdate));
+            })
+            .catch(error => console.log(error.response));
+    };
 
     if (loading) {
         return <LoadingIndicator loadingText={'Loading profile'} />;
@@ -63,7 +71,7 @@ const ProfileScreen = () => {
             <Formik
                 validate={validate}
                 initialValues={user}
-                onSubmit={values => console.log(values)}>
+                onSubmit={updateProfile}>
                 {({
                     handleChange,
                     handleBlur,
@@ -76,9 +84,12 @@ const ProfileScreen = () => {
                     <View style={globalStyles.formContainer}>
                         {/*TODO: take picture from camera*/}
                         <Image
-                            source={{uri: user.profileImage?.url}}
+                            source={
+                                user.profileImage?.url
+                                    ? {uri: user.profileImage?.url}
+                                    : require('../../../components/default-profile.png')
+                            }
                             style={{width: 100, height: 100, borderRadius: 100}}
-                            defaultSource={require('../../../components/default-profile.png')}
                         />
                         <View
                             style={[
@@ -143,14 +154,20 @@ const ProfileScreen = () => {
                         </View>
                         <View style={globalStyles.inputContainer}>
                             <Text>Birthdate</Text>
-                            {/*TODO: change text style */}
                             <TouchableOpacity
                                 onPress={() => {
                                     DateTimePickerAndroid.open({
                                         mode: 'date',
-                                        onChange: (e, date) =>
-                                            setFieldValue('birthdate', date),
-                                        value: new Date(),
+                                        onChange: (e, date) => {
+                                            if (date !== undefined) {
+                                                setFieldValue(
+                                                    'birthdate',
+                                                    date,
+                                                );
+                                                setBirthdate(date);
+                                            }
+                                        },
+                                        value: birthdate,
                                     });
                                 }}>
                                 <TextInput
@@ -158,24 +175,71 @@ const ProfileScreen = () => {
                                     selectTextOnFocus={false}
                                     pointerEvents="none"
                                     style={globalStyles.textInput}
-                                    value={undefined}
+                                    value={birthdate.toISOString().slice(0, 10)}
                                 />
                             </TouchableOpacity>
                             {errors.birthdate && touched.birthdate ? (
                                 <Text style={globalStyles.error}>
-                                    {/*{errors.birthdate?.toDateString()}*/}
+                                    {/*{errors.birthdate.toDateString()}*/}
                                 </Text>
                             ) : null}
                         </View>
-                        {/*TODO: radio button for gender*/}
-                        <Text>{user.gender}</Text>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                gap: 30,
+                                marginBottom: 30,
+                            }}>
+                            <TouchableOpacity
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    gap: 5,
+                                }}
+                                onPress={() => setFieldValue('gender', 'MALE')}>
+                                <Image
+                                    style={{width: 15, height: 15}}
+                                    source={
+                                        values.gender === 'MALE'
+                                            ? require('../../../components/toolbar/checked.png')
+                                            : require('../../../components/toolbar/unchecked.png')
+                                    }
+                                />
+                                <Text>Male</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    gap: 5,
+                                }}
+                                onPress={() =>
+                                    setFieldValue('gender', 'FEMALE')
+                                }>
+                                <Image
+                                    style={{width: 15, height: 15}}
+                                    source={
+                                        values.gender === 'FEMALE'
+                                            ? require('../../../components/toolbar/checked.png')
+                                            : require('../../../components/toolbar/unchecked.png')
+                                    }
+                                />
+                                <Text>Female</Text>
+                            </TouchableOpacity>
+                        </View>
                         <ButtonCustom onPress={handleSubmit} title="Update" />
                         <ButtonCustom
                             onPress={() => console.log('Change password')}
                             title="Change password"
                         />
                         <ButtonCustom
-                            onPress={() => setAuthToken('')}
+                            onPress={() => {
+                                GoogleSignin.signOut().then();
+                                setAuthToken('');
+                            }}
                             title="Log out"
                         />
                     </View>

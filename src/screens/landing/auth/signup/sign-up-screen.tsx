@@ -1,18 +1,22 @@
 import {Formik} from 'formik';
-import {Image, Text, TextInput, View} from 'react-native';
+import {Image, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import globalStyles from '../../../../styles/style';
-import React from 'react';
+import React, {useState} from 'react';
 import ButtonCustom from '../../../../components/button-custom/button-custom';
 import {NavigationProp} from '@react-navigation/native';
+import {UserAPI} from '../../../../api/user-api';
 
 interface RegisterState {
     email: string;
     password: string;
     retypePassword: string;
+    firstName: string;
+    lastName: string;
+    gender: string;
 }
 
 const validate = (values: RegisterState) => {
-    const errors: RegisterState = {email: '', password: '', retypePassword: ''};
+    const errors: Partial<RegisterState> = {};
     if (!values.email) {
         errors.email = 'Email is required';
     } else if (
@@ -34,17 +38,51 @@ const validate = (values: RegisterState) => {
             'Retype password must be more than 8 characters';
     }
 
+    if (!values.firstName) {
+        errors.firstName = 'First name is required';
+    } else if (!/[A-Za-z]+/i.test(values.firstName)) {
+        errors.firstName = 'First name must not contain special character';
+    }
+
+    if (!values.lastName) {
+        errors.lastName = 'Last name is required';
+    } else if (!/[A-Za-z]+/i.test(values.lastName)) {
+        errors.lastName = 'Last name must not contain special character';
+    }
+
+    if (!values.gender) {
+        errors.gender = 'Please select gender';
+    }
+
     return errors;
 };
 
 const SignUpScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
-    // TODO: api call
+    const [message, setMessage] = useState('');
+    const [loading, setLoading] = useState(false);
+    const signUp = (values: RegisterState) => {
+        setLoading(true);
+        UserAPI.signUp(values)
+            .then(() =>
+                setMessage('Signup successfully. Please verify your email'),
+            )
+            .catch(error => console.log(error))
+            .finally(() => setLoading(false));
+    };
+
     return (
         <View style={globalStyles.centerView}>
             <Formik
                 validate={validate}
-                initialValues={{email: '', password: '', retypePassword: ''}}
-                onSubmit={values => console.log(values)}>
+                initialValues={{
+                    email: '',
+                    password: '',
+                    retypePassword: '',
+                    firstName: '',
+                    lastName: '',
+                    gender: '',
+                }}
+                onSubmit={signUp}>
                 {({
                     handleChange,
                     handleBlur,
@@ -52,10 +90,13 @@ const SignUpScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
                     values,
                     errors,
                     touched,
+                    setFieldValue,
                 }) => (
                     <View style={globalStyles.formContainer}>
                         {/*TODO: logo color*/}
-                        <Image source={require("../../../../components/toolbar/logo.png")} />
+                        <Image
+                            source={require('../../../../components/toolbar/logo.png')}
+                        />
                         <Text style={globalStyles.heading1}>Sign Up</Text>
                         <View style={globalStyles.inputContainer}>
                             <TextInput
@@ -101,7 +142,106 @@ const SignUpScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
                                 </Text>
                             ) : null}
                         </View>
-                        <ButtonCustom onPress={handleSubmit} title="Sign Up" />
+                        <View
+                            style={[
+                                globalStyles.horizontal,
+                                {
+                                    width: '100%',
+                                    columnGap: 5,
+                                },
+                            ]}>
+                            <View
+                                style={[
+                                    globalStyles.inputContainer,
+                                    {flex: 1},
+                                ]}>
+                                <TextInput
+                                    style={globalStyles.textInput}
+                                    onChangeText={handleChange('firstName')}
+                                    onBlur={handleBlur('firstName')}
+                                    value={values.firstName}
+                                    placeholder={'First name'}
+                                />
+                                {errors.firstName && touched.firstName ? (
+                                    <Text style={globalStyles.error}>
+                                        {errors.firstName}
+                                    </Text>
+                                ) : null}
+                            </View>
+
+                            <View
+                                style={[
+                                    globalStyles.inputContainer,
+                                    {flex: 1},
+                                ]}>
+                                <TextInput
+                                    style={globalStyles.textInput}
+                                    onChangeText={handleChange('lastName')}
+                                    onBlur={handleBlur('lastName')}
+                                    value={values.lastName}
+                                    placeholder={'Last name'}
+                                />
+                                {errors.lastName && touched.lastName ? (
+                                    <Text style={globalStyles.error}>
+                                        {errors.lastName}
+                                    </Text>
+                                ) : null}
+                            </View>
+                        </View>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                gap: 30,
+                                marginBottom: 30,
+                            }}>
+                            <TouchableOpacity
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    gap: 5,
+                                }}
+                                onPress={() =>
+                                    setFieldValue('gender', 'MALE')
+                                }>
+                                <Image
+                                    style={{width: 15, height: 15}}
+                                    source={
+                                        values.gender === 'MALE'
+                                            ? require('../../../../components/toolbar/checked.png')
+                                            : require('../../../../components/toolbar/unchecked.png')
+                                    }
+                                />
+                                <Text>Male</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    gap: 5,
+                                }}
+                                onPress={() =>
+                                    setFieldValue('gender', 'FEMALE')
+                                }>
+                                <Image
+                                    style={{width: 15, height: 15}}
+                                    source={
+                                        values.gender === 'FEMALE'
+                                            ? require('../../../../components/toolbar/checked.png')
+                                            : require('../../../../components/toolbar/unchecked.png')
+                                    }
+                                />
+                                <Text>Female</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <Text style={globalStyles.error}>{message}</Text>
+                        <ButtonCustom
+                            onPress={handleSubmit}
+                            title={loading ? 'Loading' : 'Sign Up'}
+                            disabled={loading}
+                        />
                         <Text
                             onPress={() => navigation.navigate('Login')}
                             style={globalStyles.marginTop}>

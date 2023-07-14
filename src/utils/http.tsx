@@ -5,7 +5,7 @@ import {SERVER_URL} from '@env';
 export class Http {
     instance: AxiosInstance;
     constructor() {
-        console.log(SERVER_URL);
+        console.log('Connect to server: ' + SERVER_URL);
         this.instance = axios.create({
             baseURL: SERVER_URL,
             timeout: 10000,

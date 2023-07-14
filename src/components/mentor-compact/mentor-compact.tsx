@@ -27,14 +27,13 @@ const styles = StyleSheet.create({
     },
 
     vertical: {
-        ...globalStyles.centerView,
+        // ...globalStyles.centerView,
         ...globalStyles.vertical,
     },
 });
 
 const MentorCompact = ({mentor}: {mentor: Partial<User>}) => {
     const navigation = useNavigation();
-    // FIXME: mentor image not in center
     return (
         <View style={[styles.vertical, styles.mentorContainer]}>
             <TouchableOpacity
@@ -48,16 +47,16 @@ const MentorCompact = ({mentor}: {mentor: Partial<User>}) => {
                         },
                     })
                 }>
-                <Image
-                    source={{uri: mentor.profileImage?.url}}
-                    style={styles.image}
-                />
+                <View style={{width: '100%', alignItems: 'center'}}>
+                    <Image
+                        source={{uri: mentor.profileImage?.url}}
+                        style={styles.image}
+                    />
+                </View>
                 <Text style={styles.mentorName}>
                     {mentor.firstName} {mentor.lastName}
                 </Text>
-                <Text style={globalStyles.textCenter}>
-                    {mentor.mentor?.bio}
-                </Text>
+                <Text style={{}}>{mentor.mentor?.bio}</Text>
             </TouchableOpacity>
         </View>
     );

@@ -5,6 +5,14 @@ export type LoginProps = {
     password: string;
 };
 
+export type SignUpProps = {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    gender: string;
+};
+
 export type UploadImageProfileProps = {
     profileImage: string;
 };
@@ -45,6 +53,27 @@ export const UserAPI = {
             throw err;
         }
     },
+    signUp: async (signUpProps: SignUpProps) => {
+        try {
+            const res = await http.post('/signup', signUpProps);
+            return res?.data;
+        } catch (err: any) {
+            throw err;
+        }
+    },
+    loginGoogle: async (googleToken: string) => {
+        try {
+            console.log(googleToken);
+            const res = await http.post('/login/google', googleToken, {
+                headers: {
+                    'Content-Type': 'text/plain',
+                },
+            });
+            return res?.data;
+        } catch (err: any) {
+            throw err;
+        }
+    },
     getByUserToken: async () => {
         const res = await http.get('/user/profile', {
             headers: {
@@ -76,7 +105,7 @@ export const UserAPI = {
     updateUser: async (params: UpdateUserParams) => {
         const res = await http.put('/user/profile', params, {
             headers: {
-                Authorization: 'Bearer ' + getAccessToken(),
+                Authorization: 'Bearer ' + (await getAccessToken()),
             },
         });
         return res?.data;
@@ -95,6 +124,22 @@ export const UserAPI = {
         const res = await http.put('/user/profile/student', params, {
             headers: {
                 Authorization: 'Bearer ' + getAccessToken(),
+            },
+        });
+        return res?.data;
+    },
+    updateNotificationToken: async (params: {token: string}) => {
+        const res = await http.put('user/notification/token', params, {
+            headers: {
+                Authorization: 'Bearer ' + (await getAccessToken()),
+            },
+        });
+        return res?.data;
+    },
+    deleteNotificationToken: async () => {
+        const res = await http.delete('user/notification/token', {
+            headers: {
+                Authorization: 'Bearer ' + (await getAccessToken()),
             },
         });
         return res?.data;
