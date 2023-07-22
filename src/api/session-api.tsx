@@ -14,7 +14,7 @@ export type CreateSessionParams = {
 export const SessionAPI = {
     getSessionByCourseID: async (courseID: string) => {
         try {
-            const res = await http.get(`/session/course/${courseID}`);
+            const res = await http.get(`/courses/${courseID}/sessions`);
             return res.data;
         } catch (error) {
             throw error;
@@ -23,7 +23,7 @@ export const SessionAPI = {
 
     createSession: async (params: CreateSessionParams) => {
         try {
-            const res = await http.post('/session', params, {
+            const res = await http.post('/sessions', params, {
                 headers: {
                     Authorization:
                         'Bearer ' + getAccessToken()

@@ -32,9 +32,11 @@ export const CourseAPI = {
         try {
             var url;
             if (Object.keys(searchCourseParams).length == 0) {
-                url = '/course';
+                url = '/courses';
             } else {
-                url = `/course?${toQueryParams(searchCourseParams).toString()}`;
+                url = `/courses?${toQueryParams(
+                    searchCourseParams,
+                ).toString()}`;
             }
 
             const res = await http.get(url);
@@ -45,7 +47,7 @@ export const CourseAPI = {
     },
     getById: async (id: string) => {
         try {
-            const res = await http.get(`/course/${id}`);
+            const res = await http.get(`/courses/${id}`);
             return res.data;
         } catch (error) {
             throw error;

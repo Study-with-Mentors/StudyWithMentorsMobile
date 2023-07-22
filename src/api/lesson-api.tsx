@@ -9,7 +9,7 @@ export const LessionAPI = {
     getLessonByDate: async (params: GetLessonByDateParams) => {
         try {
             const res = await http.get(
-                `/student/lesson?${toQueryParams(params)}`,
+                `me/student/lessons?${toQueryParams(params)}`,
                 {
                     headers: {
                         Authorization: 'Bearer ' + (await getAccessToken()),
@@ -23,7 +23,7 @@ export const LessionAPI = {
     },
     getLessonByClass: async (clazzId: string) => {
         try {
-            const res = await http.get(`/clazz/${clazzId}/lesson`);
+            const res = await http.get(`/classes/${clazzId}/lessons`);
             return res.data;
         } catch (error) {
             throw error;

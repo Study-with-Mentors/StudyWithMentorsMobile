@@ -95,9 +95,10 @@ const ClazzDetailScreen = ({route}: {route: RouteProp<any>}) => {
                 } else {
                     EnrollmentApi.createEnrollment({classId: clazzId})
                         .then(response => setPaymentURL(response.object))
-                        .catch(_error =>
-                            setMessage('Already enrolled in this class'),
-                        )
+                        .catch(_error => {
+                            console.log(_error.response);
+                            setMessage('Already enrolled in this class');
+                        })
                         .finally(() => setLoadingPayment(false));
                 }
             })

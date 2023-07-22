@@ -75,61 +75,61 @@ export const UserAPI = {
         }
     },
     getByUserToken: async () => {
-        const res = await http.get('/user/profile', {
+        const res = await http.get('/me', {
             headers: {
                 Authorization: 'Bearer ' + (await getAccessToken()),
             },
         });
         return res?.data;
     },
-    getById: async (id: string) => {
-        const res = await http.get(`/user/profile/${id}`);
-        return res?.data;
-    },
+    // getById: async (id: string) => {
+    //     const res = await http.get(`/user/profile/${id}`);
+    //     return res?.data;
+    // },
     getMentorProfileById: async (id: string) => {
-        const res = await http.get(`/mentor/${id}`);
+        const res = await http.get(`/mentors/${id}`);
         return res?.data;
     },
     getMentorList: async () => {
-        const res = await http.get('/mentor');
+        const res = await http.get('/mentors');
         return res?.data;
     },
-    uploadImageProfile: async (params: UploadImageProfileProps) => {
-        const res = await http.put('/user/profile', params, {
-            headers: {
-                Authorization: 'Bearer ' + getAccessToken(),
-            },
-        });
-        return res?.data;
-    },
+    // uploadImageProfile: async (params: UploadImageProfileProps) => {
+    //     const res = await http.put('/user/profile', params, {
+    //         headers: {
+    //             Authorization: 'Bearer ' + getAccessToken(),
+    //         },
+    //     });
+    //     return res?.data;
+    // },
     updateUser: async (params: UpdateUserParams) => {
-        const res = await http.put('/user/profile', params, {
+        const res = await http.put('me', params, {
             headers: {
                 Authorization: 'Bearer ' + (await getAccessToken()),
             },
         });
         return res?.data;
     },
-    updateUserProfileStudent: async (
-        params: UpdateUserProfileStudentParams,
-    ) => {
-        const res = await http.put('/user/profile/student', params, {
-            headers: {
-                Authorization: 'Bearer ' + getAccessToken(),
-            },
-        });
-        return res?.data;
-    },
-    updateUserProfileMentor: async (params: UpdateUserProfileStudentParams) => {
-        const res = await http.put('/user/profile/student', params, {
-            headers: {
-                Authorization: 'Bearer ' + getAccessToken(),
-            },
-        });
-        return res?.data;
-    },
+    // updateUserProfileStudent: async (
+    //     params: UpdateUserProfileStudentParams,
+    // ) => {
+    //     const res = await http.put('/user/profile/student', params, {
+    //         headers: {
+    //             Authorization: 'Bearer ' + getAccessToken(),
+    //         },
+    //     });
+    //     return res?.data;
+    // },
+    // updateUserProfileMentor: async (params: UpdateUserProfileStudentParams) => {
+    //     const res = await http.put('/user/profile/student', params, {
+    //         headers: {
+    //             Authorization: 'Bearer ' + getAccessToken(),
+    //         },
+    //     });
+    //     return res?.data;
+    // },
     updateNotificationToken: async (params: {token: string}) => {
-        const res = await http.put('user/notification/token', params, {
+        const res = await http.put('/notification/token', params, {
             headers: {
                 Authorization: 'Bearer ' + (await getAccessToken()),
             },
@@ -137,7 +137,7 @@ export const UserAPI = {
         return res?.data;
     },
     deleteNotificationToken: async () => {
-        const res = await http.delete('user/notification/token', {
+        const res = await http.delete('/notification/token', {
             headers: {
                 Authorization: 'Bearer ' + (await getAccessToken()),
             },

@@ -34,7 +34,6 @@ export const AppContext = React.createContext<ContextType>({} as ContextType);
 const onMessageReceived = async (
     message: FirebaseMessagingTypes.RemoteMessage,
 ) => {
-    await notifee.requestPermission();
     const channelId = await notifee.createChannel({
         id: 'default',
         name: 'Default channel',
@@ -64,6 +63,7 @@ const updateNotificationToken = async () => {
         .then(() => {})
         .catch(error => console.log('Update notif token error: ' + error));
     messaging().onMessage(onMessageReceived);
+    await notifee.requestPermission();
 };
 
 const AppScreenStack = () => {
@@ -87,7 +87,8 @@ const AppScreenStack = () => {
     };
     useEffect(() => {
         LogBox.ignoreLogs(['Warning:...']);
-    }, [])
+        LogBox.ignoreAllLogs();
+    }, []);
 
     useEffect(() => {
         console.log('Google client: ' + GOOGLE_CLIENT_ID);

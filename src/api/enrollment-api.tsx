@@ -9,7 +9,7 @@ export const EnrollmentApi = {
     createEnrollment: async (enrollmentParams: EnrollmentParams) => {
         try {
             enrollmentParams.paymentType = 'VNPAY';
-            const res = await http.post('/enrollment', enrollmentParams, {
+            const res = await http.post('/enrollments', enrollmentParams, {
                 headers: {
                     Authorization: 'Bearer ' + (await getAccessToken()),
                 },
